@@ -26,7 +26,7 @@ type PostgreSQL struct {
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	DatabaseName string `json:"database_name"`
-	SSLMode      bool   `json:"ssl_mode"`
+	SSLMode      string `json:"ssl_mode"`
 }
 
 type Mongo struct {
