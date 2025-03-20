@@ -13,3 +13,17 @@ type User struct {
 	Telegram string
 	Mail     string
 }
+
+func NewUser(login, passwrod string) *User {
+	return &User{
+		Id:       uuid.New(),
+		Login:    login,
+		Password: passwrod,
+		Name:     "",
+		Surname:  "",
+		Bio:      "",
+		Phone:    "",
+		Telegram: "",
+		Mail:     "",
+	}
+}
