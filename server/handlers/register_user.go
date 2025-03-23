@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"labyrinth/logic"
 	"net/http"
 )
 
@@ -10,7 +12,7 @@ type RegisterRequest struct {
 	Password string `json" "password"`
 }
 
-func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -29,9 +31,12 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*
-		логика для регистрации юзера в бд
-	*/
+	err = logic.NewUser(req.Email, req.Password)
+	if err != nil {
+		strErr := fmt.Sprintf("Failed to register new user: %v", err)
+		http.Error(w, strErr, http.StatusBadRequest)
+		return
+	}
 
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")

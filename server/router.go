@@ -9,10 +9,9 @@ import (
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/ping", handlers.Ping).Methods("GET")
-	/*
-		r.HandleFunc("/register")
-		r.HandleFunc("/login")
-		r.HandleFunc("/profile/{id}").Methods("GET", "PUT", "DELETE", "POST")
-	*/
+
+	r.HandleFunc("/register", handlers.RegisterUserHandler).Methods("POST")
+	r.HandleFunc("/login", handlers.LoginUserHandler).Methods("POST")
+
 	return r
 }

@@ -1,5 +1,12 @@
 package logic
 
+import (
+	"labyrinth/config"
+	"labyrinth/database/postgres"
+)
+
+var ps = postgres.NewPostgres(config.Conf)
+
 var InjectionKeywords = []string{
 	"SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER", "TRUNCATE",
 	"EXEC", "EXECUTE", "UNION", "JOIN", "GRANT", "REVOKE", "SHOW", "DATABASE",

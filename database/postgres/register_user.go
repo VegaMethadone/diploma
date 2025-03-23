@@ -3,7 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"labyrinth/entiry/user"
+	"labyrinth/entity/user"
 	"log"
 
 	_ "github.com/lib/pq"

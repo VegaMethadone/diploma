@@ -1,6 +1,6 @@
 -- Создание таблицы users
 CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY  UNIQUE,
     login VARCHAR(63) NOT NULL UNIQUE,
     password VARCHAR(63) NOT NULL,
     name TEXT,
@@ -13,8 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Создание таблицы companies
 CREATE TABLE IF NOT EXISTS companies (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY UNIQUE,
     owner_id UUID REFERENCES users(id) ON DELETE CASCADE
+    name  TEXT,
+    description TEXT
 );
 
 -- Создание таблицы company_info

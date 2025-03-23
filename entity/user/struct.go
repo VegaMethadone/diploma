@@ -24,6 +24,6 @@ func NewUser(login, passwrod string) *User {
 		Bio:      "",
 		Phone:    "",
 		Telegram: "",
-		Mail:     "",
+		Mail:     login,
 	}
 }

@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -18,4 +19,28 @@ func NewToken(settings jwt.MapClaims) string {
 	}
 
 	return tokenString
+}
+
+func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return secretKey, nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse token: %w", err)
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("failed to extract claims")
+	}
+
+	return claims, nil
 }
