@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Создание таблицы companies
 CREATE TABLE IF NOT EXISTS companies (
     id UUID PRIMARY KEY UNIQUE,
-    owner_id UUID REFERENCES users(id) ON DELETE CASCADE
+    owner_id UUID REFERENCES users(id) ON DELETE CASCADE,
     name  TEXT,
     description TEXT
 );
