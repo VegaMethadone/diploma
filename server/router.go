@@ -2,6 +2,7 @@ package server
 
 import (
 	"labyrinth/server/handlers"
+	"labyrinth/server/middleware"
 
 	"github.com/gorilla/mux"
 )
@@ -13,5 +14,6 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("/register", handlers.RegisterUserHandler).Methods("POST")
 	r.HandleFunc("/login", handlers.LoginUserHandler).Methods("POST")
 
+	r.HandleFunc("/companies", middleware.AuthMiddleware(handlers.GetCompaniesHandler)).Methods("GET") // посмотреть, мог накосяить с ограничем методов
 	return r
 }

@@ -2,24 +2,43 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 	"labyrinth/entity/company"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) GetUserCompanies(uderUUID_ uuid.UUID) (*[]company.Company, error) {
+func (p *Postgres) GetUserCompanies(userId uuid.UUID) ([]company.CompanyLogin, error) {
 	db, err := sql.Open("postgres", p.conn)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 	defer db.Close()
 
-	findAsOwnerQuery := `
-		SELECT id, owner_id, text
-		FROM companies where owner_id = $1 
-	`
+	findQuery := `
+        SELECT user_id, company_id
+        FROM employee_company
+        WHERE user_id = $1
+    `
+	rows, err := db.Query(findQuery, userId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
 
-	/*
-		поменять  логику, что  я  буду  добавлять овнера сразу как имплоя
-	*/
+	var userCompanies []company.CompanyLogin
+
+	for rows.Next() {
+		var uc company.CompanyLogin
+		if err := rows.Scan(&uc.UserId, &uc.CompanyId); err != nil {
+			return nil, fmt.Errorf("failed to scan row: %w", err) // возможно тут вылезет ошибка, что нет строк, надо обработать
+		}
+		userCompanies = append(userCompanies, uc)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows iteration error: %w", err)
+	}
+
+	return userCompanies, nil
 }

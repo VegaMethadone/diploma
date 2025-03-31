@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"labyrinth/entity/company"
 	"log"
+
+	"github.com/google/uuid"
 )
 
-func (p *Postgres) RegisterCompany(company_ *company.Company) error {
+func (p *Postgres) RegisterCompany(company_ *company.Company) (*uuid.UUID, error) {
 	db, err := sql.Open("postgres", p.conn)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer db.Close()
 
@@ -27,9 +29,9 @@ func (p *Postgres) RegisterCompany(company_ *company.Company) error {
 		company_.Description,
 	)
 	if err != nil {
-		return fmt.Errorf("failed to insert company: %w", err)
+		return nil, fmt.Errorf("failed to insert new company: %v", err)
 	}
 
 	log.Println("Company registered successfully!")
-	return nil
+	return &company_.Id, nil
 }
