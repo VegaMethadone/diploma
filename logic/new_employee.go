@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewEmployee(userId, companyId uuid.UUID) error {
+func NewEmployee(userId, companyId, positionId uuid.UUID) error {
 	hasUserId, err := ps.CheckUser(userId)
 	if err != nil {
 		return err
@@ -18,7 +18,7 @@ func NewEmployee(userId, companyId uuid.UUID) error {
 	}
 
 	if hasUserId && hasCompanyId {
-		return ps.NewEmployee(userId, companyId)
+		return ps.NewEmployee(userId, companyId, positionId)
 	}
 
 	return errors.New("user or company not exists") // добавить логирование, чтобы было понятно какая компания или юзер не сущесвует

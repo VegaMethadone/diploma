@@ -9,11 +9,12 @@ import (
 
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/ping", handlers.Ping).Methods("GET")
+	r.HandleFunc("app/ping", handlers.Ping).Methods("GET")
 
-	r.HandleFunc("/register", handlers.RegisterUserHandler).Methods("POST")
-	r.HandleFunc("/login", handlers.LoginUserHandler).Methods("POST")
+	r.HandleFunc("app/register", handlers.RegisterUserHandler).Methods("POST")
+	r.HandleFunc("app/login", handlers.LoginUserHandler).Methods("POST")
 
-	r.HandleFunc("/companies", middleware.AuthMiddleware(handlers.GetCompaniesHandler)).Methods("GET") // посмотреть, мог накосяить с ограничем методов
+	r.HandleFunc("app/companies", middleware.AuthMiddleware(handlers.GetCompaniesHandler)).Methods("GET")
+	r.HandleFunc("app/company/{id}", middleware.AuthMiddleware(handlers.LoginCompanyHandler)).Methods("GET")
 	return r
 }

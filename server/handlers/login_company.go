@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"encoding/json"
+	"labyrinth/logic"
 	"net/http"
+	"time"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func LoginCompanyHandler(w http.ResponseWriter, r *http.Request) {
@@ -14,45 +16,43 @@ func LoginCompanyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 1. Получаем userUUID из контекста (установленного AuthMiddleware)
-	userUUID, ok := r.Context().Value("userUUID").(uuid.UUID)
+	userId, ok := r.Context().Value("userUUID").(uuid.UUID)
 	if !ok {
 		http.Error(w, "Failed to get user UUID from context", http.StatusInternalServerError)
 		return
 	}
 
-	// // 2. Проверяем принадлежность пользователя к компании
-	// company, employee, err := logic.GetUserCompanyInfo(userUUID)
-	// if err != nil {
-	// 	http.Error(w, "Failed to get company info: "+err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	vars := mux.Vars(r)
+	companyIdstr, ok := vars["id"]
+	if !ok {
+		http.Error(w, "Company ID not found in URL", http.StatusBadRequest)
+		return
+	}
 
-	// if company == nil {
-	// 	http.Error(w, "User doesn't belong to any company", http.StatusForbidden)
-	// 	return
-	// }
+	companyId, err := uuid.Parse(companyIdstr)
+	if err != nil {
+		http.Error(w, "Invalid company ID format", http.StatusBadRequest)
+		return
 
-	// /*
-	// 	создания  jwt токена
-	// */
+	}
 
-	// // 4. Устанавливаем куки для компании
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:     "jwt_token_company",
-	// 	Value:    companyToken,
-	// 	Expires:  time.Now().Add(24 * time.Hour),
-	// 	HttpOnly: true,
-	// 	Secure:   true,
-	// 	SameSite: http.SameSiteStrictMode,
-	// 	Path:     "/",
-	// })
+	token, err := logic.LoginCompany(userId, companyId)
+	if err != nil {
+		http.Error(w, "Failed to generate token: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	// 5. Возвращаем успешный ответ
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
-		"status":   "success",
-		"message":  "Company login successful",
-		"company":  company.Name,
-		"position": employee.Position,
-	})
+	cookie := http.Cookie{
+		Name:     "jwt_token_employee",
+		Value:    token,                          // Значение куки (JWT-токен)
+		Expires:  time.Now().Add(24 * time.Hour), // Время жизни куки (24 часа)
+		HttpOnly: true,                           // Защита от XSS-атак
+		// Secure:   true,                           // Только для HTTPS (если используется)
+		Path:     "/",                     // Путь, для которого кука действительна
+		SameSite: http.SameSiteStrictMode, // Защита от CSRF-атак
+	}
+
+	http.SetCookie(w, &cookie)
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Login successful"))
 }

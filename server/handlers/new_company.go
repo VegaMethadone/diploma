@@ -10,8 +10,9 @@ import (
 )
 
 type RegisterCompanyRequest struct {
-	Name        string `json:  "name"`
-	Description string `json: "description"`
+	Name         string `json:  "name"`
+	Description  string `json: "description"`
+	PositionName string `json: "position_name"`
 }
 
 func RegisterCompanyHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +28,7 @@ func RegisterCompanyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := logic.NewCompany(req.Name, req.Description, userUUID); err != nil {
+	if err := logic.NewCompany(req.Name, req.Description, req.PositionName, userUUID); err != nil {
 		http.Error(w, fmt.Sprintf("Failed to register company: %v", err), http.StatusInternalServerError)
 		return
 	}

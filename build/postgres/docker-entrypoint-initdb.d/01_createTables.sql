@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS company_info (
 CREATE TABLE IF NOT EXISTS positions (
     id UUID PRIMARY KEY,
     company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
-    name INTEGER NOT NULL
+    lvl INTEGER NOT NULL, -- 0 - owner -- 1 amdin -- 2 employee -- no role
+    name TEXT NOT NULL
 );
 
 -- Создание таблицы employee_company

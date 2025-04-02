@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) NewEmployee(userId, companyId uuid.UUID) error {
+func (p *Postgres) NewEmployee(userId, companyId, positionId uuid.UUID) error {
 	db, err := sql.Open("postgres", p.conn)
 	if err != nil {
 		return err
@@ -24,7 +24,7 @@ func (p *Postgres) NewEmployee(userId, companyId uuid.UUID) error {
 		uuid.New(),
 		userId,
 		companyId,
-		nil,
+		positionId,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to insert new employee: %v", err)
@@ -32,4 +32,4 @@ func (p *Postgres) NewEmployee(userId, companyId uuid.UUID) error {
 
 	log.Println("Employee registered successfully!")
 	return nil
-} // добавить потом nil в роли, либо добавить роли
+}
