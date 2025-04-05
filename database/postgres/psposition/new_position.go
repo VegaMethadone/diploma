@@ -3,11 +3,12 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"labyrinth/database/postgres"
 	"labyrinth/entity/position"
 )
 
-func (p *Postgres) NewPosition(pos *position.Position) error {
-	db, err := sql.Open("postgres", p.conn)
+func NewPosition(pos *position.Position) error {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return err
 	}

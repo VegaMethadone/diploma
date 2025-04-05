@@ -44,8 +44,11 @@ CREATE TABLE IF NOT EXISTS employee_company (
 -- Создание таблицы departments
 CREATE TABLE IF NOT EXISTS departments (
     id UUID PRIMARY KEY,
-    company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
-    owner_employee_id UUID REFERENCES employee_company(id) ON DELETE CASCADE
+    company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    owner_id UUID REFERENCES employee_company(id) ON DELETE SET NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    parent UUID REFERENCES departments(id) ON DELETE SET NULL
 );
 
 -- Создание таблицы employee_department

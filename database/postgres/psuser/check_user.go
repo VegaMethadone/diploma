@@ -3,12 +3,13 @@ package postgres
 import (
 	"database/sql"
 	"errors"
+	"labyrinth/database/postgres"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) CheckUser(userId uuid.UUID) (bool, error) {
-	db, err := sql.Open("postgres", p.conn)
+func CheckUser(userId uuid.UUID) (bool, error) {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return false, err
 	}

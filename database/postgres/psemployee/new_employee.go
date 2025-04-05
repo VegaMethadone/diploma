@@ -3,13 +3,14 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"labyrinth/database/postgres"
 	"log"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) NewEmployee(userId, companyId, positionId uuid.UUID) error {
-	db, err := sql.Open("postgres", p.conn)
+func NewEmployee(userId, companyId, positionId uuid.UUID) error {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return err
 	}

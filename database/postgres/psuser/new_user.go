@@ -3,14 +3,15 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"labyrinth/database/postgres"
 	"labyrinth/entity/user"
 	"log"
 
 	_ "github.com/lib/pq"
 )
 
-func (p *Postgres) RegisterUser(user *user.User) error {
-	db, err := sql.Open("postgres", p.conn)
+func RegisterUser(user *user.User) error {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return err
 	}

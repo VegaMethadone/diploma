@@ -3,12 +3,13 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
+	pscompany "labyrinth/database/postgres/pscompany"
 
 	"github.com/google/uuid"
 )
 
 func GetUserCompanies(userId uuid.UUID) (string, error) {
-	userCompanies, err := ps.GetUserCompanies(userId)
+	userCompanies, err := pscompany.GetUserCompanies(userId)
 	if err != nil {
 		return "", err
 	}

@@ -2,6 +2,8 @@ package logic
 
 import (
 	"fmt"
+	pscompany "labyrinth/database/postgres/pscompany"
+	psemployee "labyrinth/database/postgres/psemployee"
 	myJwt "labyrinth/jwt"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,7 +18,8 @@ func LoginCompany(userId, companyId uuid.UUID) (string, error) {
 	*/
 
 	// 1. Проверка существования компании
-	companyExists, err := ps.CheckCompany(companyId)
+	// companyExists, err := CheckCompany(companyId)
+	companyExists, err := pscompany.CheckCompany(companyId)
 	if err != nil {
 		return "", fmt.Errorf("failed to check company: %w", err)
 	}
@@ -25,7 +28,7 @@ func LoginCompany(userId, companyId uuid.UUID) (string, error) {
 	}
 
 	// 2. Получение сотрудника
-	employee_, err := ps.GetEmployee(userId, companyId)
+	employee_, err := psemployee.GetEmployee(userId, companyId)
 	if err != nil {
 		return "", fmt.Errorf("failed to get employee: %w", err)
 	}

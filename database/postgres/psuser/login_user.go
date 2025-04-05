@@ -4,13 +4,14 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"labyrinth/database/postgres"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (p *Postgres) LoginUser(login, password string) (*uuid.UUID, error) {
-	db, err := sql.Open("postgres", p.conn)
+func LoginUser(login, password string) (*uuid.UUID, error) {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}

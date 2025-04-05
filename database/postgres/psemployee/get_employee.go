@@ -4,13 +4,14 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"labyrinth/database/postgres"
 	"labyrinth/entity/employee"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) GetEmployee(userId, companyId uuid.UUID) (*employee.Employee, error) {
-	db, err := sql.Open("postgres", p.conn)
+func GetEmployee(userId, companyId uuid.UUID) (*employee.Employee, error) {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return nil, err
 	}

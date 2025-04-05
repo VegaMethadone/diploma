@@ -4,13 +4,14 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"labyrinth/database/postgres"
 	"labyrinth/entity/position"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) CheckPosition(positionId uuid.UUID) (*position.Position, error) {
-	db, err := sql.Open("postgres", p.conn)
+func CheckPosition(positionId uuid.UUID) (*position.Position, error) {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return nil, err
 	}

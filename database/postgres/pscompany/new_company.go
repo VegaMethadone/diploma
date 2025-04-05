@@ -3,14 +3,15 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"labyrinth/database/postgres"
 	"labyrinth/entity/company"
 	"log"
 
 	"github.com/google/uuid"
 )
 
-func (p *Postgres) RegisterCompany(company_ *company.Company) (*uuid.UUID, error) {
-	db, err := sql.Open("postgres", p.conn)
+func RegisterCompany(company_ *company.Company) (*uuid.UUID, error) {
+	db, err := sql.Open("postgres", postgres.GetConnection())
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package logic
 
 import (
+	psuser "labyrinth/database/postgres/psuser"
 	"labyrinth/entity/user"
 
 	"golang.org/x/crypto/bcrypt"
@@ -29,5 +30,5 @@ func NewUser(mail, password string) error {
 		return err
 	}
 
-	return ps.RegisterUser(user)
+	return psuser.RegisterUser(user)
 }
