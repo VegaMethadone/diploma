@@ -2,8 +2,7 @@ package main
 
 import (
 	"context"
-	"errors"
-	. "labyrinth/logger" // наличие точки перед импортом означает, что я объядиняю  простнаство имен и мне не нужно каждый раз писать logger.Loger, а сразу Loger
+	"fmt"
 	"labyrinth/server"
 	"log"
 	"net/http"
@@ -14,38 +13,35 @@ import (
 )
 
 func main() {
-	// Инициализация логера
-	log.Println("Initializing logger")
-	NewLoger()
-	defer Loger.Sync()
+	fmt.Println("Starting server...")
 
-	// Инициализация сервера
-	log.Println("Initializing server")
-	srv := server.NewServer()
+	// Настройка HTTP-сервера с таймаутами
+	httpServer := server.NewServer()
 
 	// Канал для graceful shutdown
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	// Запуск сервера
-	log.Println("Starting server: http://127.0.0.1:8000")
+	// Запуск сервера в горутине
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("[ ERROR ]: Failed to start server: %v", err)
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Server failed: %v", err)
 		}
 	}()
 
-	// Ожидание сигнала для graceful shutdown
+	fmt.Printf("Server started on %s\n", httpServer.Addr)
+
+	// Ожидание сигнала завершения
 	<-done
-	log.Println("Server is shutting down...")
+	fmt.Println("\nServer is shutting down...")
 
 	// Graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("[ ERROR ]: Failed to shutdown server gracefully: %v", err)
+	if err := httpServer.Shutdown(ctx); err != nil {
+		log.Printf("Server shutdown error: %v", err)
 	}
 
-	log.Println("Server has stopped.")
+	fmt.Println("Server stopped")
 }
