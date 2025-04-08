@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
         phone !~ '.*[^0-9+].*' AND           -- Только цифры и +
         phone !~ '^8[0-9]{11}' AND           -- Запрет 12-значных номеров с 8
         phone !~ '^\+7[0-9]{11}'             -- Запрет 12-значных номеров с +7
-    )
+    ),
     phone_verified BOOLEAN DEFAULT false,
     first_name VARCHAR(100),
     last_name VARCHAR(100),
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS used_uuids (
     id SERIAL PRIMARY KEY,
     uuid_id UUID NOT NULL UNIQUE,
-    used_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    used_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
