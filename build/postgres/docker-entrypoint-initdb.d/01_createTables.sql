@@ -31,3 +31,34 @@ CREATE TABLE IF NOT EXISTS used_uuids (
     uuid_id UUID NOT NULL UNIQUE,
     used_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS user_companies (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL,
+    company_id UUID NOT NULL,
+    isActive BOOLEAN DEFAULT true
+);
+
+CREATE TABLE IF NOT EXISTS companies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    owner_id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    logo_url TEXT,
+    industry VARCHAR(100),
+    employees INT DEFAULT 0,
+    is_verified BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    founded_date DATE,
+    address TEXT,
+    phone VARCHAR(20) NOT NULL CHECK (
+        phone ~ '^(\+7|7|8)[0-9]{10}$' AND  -- Основной формат
+        phone !~ '.*[^0-9+].*' AND           -- Только цифры и +
+        phone !~ '^8[0-9]{11}' AND           -- Запрет 12-значных номеров с 8
+        phone !~ '^\+7[0-9]{11}'             -- Запрет 12-значных номеров с +7
+    ),
+    email VARCHAR(255),
+    tax_number VARCHAR(50)
+);

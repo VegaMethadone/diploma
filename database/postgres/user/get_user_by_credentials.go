@@ -8,7 +8,7 @@ import (
 	"labyrinth/models/user"
 )
 
-func GetUserByCredentials(
+func (p PostgresUser) GetUserByCredentials(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	login,

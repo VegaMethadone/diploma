@@ -10,7 +10,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func CreateUser(ctx context.Context, sharedTx *sql.Tx, u *user.User) error {
+func (p PostgresUser) CreateUser(ctx context.Context, sharedTx *sql.Tx, u *user.User) error {
 	if sharedTx == nil {
 		return errors.New("start transaction before query")
 	}

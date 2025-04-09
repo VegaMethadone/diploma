@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func DeleteUser(ctx context.Context, sharedTx *sql.Tx, id uuid.UUID) error {
+func (p PostgresUser) DeleteUser(ctx context.Context, sharedTx *sql.Tx, id uuid.UUID) error {
 	if sharedTx == nil {
 		return errors.New("start transaction before query")
 	}

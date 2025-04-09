@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetUserByID(ctx context.Context, sharedTx *sql.Tx, id uuid.UUID) (*user.User, error) {
+func (p PostgresUser) GetUserByID(ctx context.Context, sharedTx *sql.Tx, id uuid.UUID) (*user.User, error) {
 	if sharedTx == nil {
 		return nil, errors.New("start transaction before query")
 	}

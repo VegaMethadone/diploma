@@ -43,7 +43,7 @@ func CheckAndReserverUUID(ctx context.Context, db *sql.DB, newUUIDfunc func() uu
 		generatedUUID := newUUIDfunc()
 		ok, err := checkUUID(ctx, db, generatedUUID)
 		if err != nil {
-			return uuid.Nil, err // верни ошибку,  что  зафелился CheckUUID
+			return uuid.Nil, err
 		}
 		if ok {
 			newUUID = generatedUUID

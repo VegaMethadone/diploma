@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"labyrinth/config"
+	"labyrinth/models/company"
 	"labyrinth/models/user"
 
 	"github.com/google/uuid"
@@ -53,7 +54,57 @@ type userDB interface {
 	) error
 }
 
-type companyDB interface{}
+type companyDB interface {
+	// CreateCompany создает новую компанию
+	CreateCompany(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		company *company.Company,
+	) error
+
+	// GetCompanyByID получает компанию по ID
+	GetCompanyByID(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		id uuid.UUID,
+	) (*company.Company, error)
+
+	// AddUserToCompany добавление юзера в компанию
+	AddUserToCompany(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		userID uuid.UUID,
+		companyID uuid.UUID,
+	) error
+
+	// GetCompaniesByUser получает компании пользователя
+	GetCompaniesByUser(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		userID uuid.UUID,
+	) ([]*company.Company, error)
+
+	// UpdateCompany обновляет данные компании
+	UpdateCompany(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		company *company.Company,
+	) error
+
+	// DeleteCompany помечает компанию как удаленную
+	DeleteCompany(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		id uuid.UUID,
+	) error
+
+	// DeactivateCompanyUsers деактивирует компанию у юзера
+	DeactivateCompanyUsers(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		companyID uuid.UUID,
+	) error
+}
 type employeeDB interface{}
 type positionDB interface{}
 type departmentDB interface{}

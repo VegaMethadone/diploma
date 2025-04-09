@@ -68,6 +68,8 @@ func TestUserCRUD(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	pu := user.NewPostgresUser()
+
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		t.Fatalf("Failed to begin transaction: %v", err)
@@ -79,14 +81,14 @@ func TestUserCRUD(t *testing.T) {
 	}()
 
 	t.Run("CreateUser", func(t *testing.T) {
-		err := user.CreateUser(ctx, tx, testUser)
+		err := pu.CreateUser(ctx, tx, testUser)
 		if err != nil {
 			t.Fatalf("CreateUser failed: %v", err)
 		}
 	})
 
 	t.Run("GetUser", func(t *testing.T) {
-		fetchedUser, err := user.GetUserByID(ctx, tx, testUser.ID)
+		fetchedUser, err := pu.GetUserByID(ctx, tx, testUser.ID)
 		if err != nil {
 			t.Fatalf("GetUserByID failed: %v", err)
 		}
@@ -97,7 +99,7 @@ func TestUserCRUD(t *testing.T) {
 	})
 
 	t.Run("GetUserByCredentials", func(t *testing.T) {
-		fetchedUser, err := user.GetUserByCredentials(ctx, tx, testUser.Login, testUser.PasswordHash)
+		fetchedUser, err := pu.GetUserByCredentials(ctx, tx, testUser.Login, testUser.PasswordHash)
 		if err != nil {
 			t.Fatalf("GetUserByID failed: %v", err)
 		}
@@ -110,14 +112,14 @@ func TestUserCRUD(t *testing.T) {
 		updatedUser := *testUser
 		updatedUser.FirstName = "UpdatedName"
 
-		err := user.UpdateUser(ctx, tx, &updatedUser)
+		err := pu.UpdateUser(ctx, tx, &updatedUser)
 		if err != nil {
 			t.Fatalf("UpdateUser failed: %v", err)
 		}
 	})
 
 	t.Run("DeleteUser", func(t *testing.T) {
-		err := user.DeleteUser(ctx, tx, testUser.ID)
+		err := pu.DeleteUser(ctx, tx, testUser.ID)
 		if err != nil {
 			t.Fatalf("DeleteUser failed: %v", err)
 		}
