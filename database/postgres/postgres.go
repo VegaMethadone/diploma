@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"labyrinth/config"
 	"labyrinth/models/company"
+	"labyrinth/models/employee"
 	"labyrinth/models/user"
 
 	"github.com/google/uuid"
@@ -105,7 +106,78 @@ type companyDB interface {
 		companyID uuid.UUID,
 	) error
 }
-type employeeDB interface{}
+
+type employeeDB interface {
+	// CreateEmployee создает нового сотрудника в базе данных.
+	// Возвращает ошибку, если операция не удалась.
+	CreateEmployee(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		empl *employee.Employee,
+	) error
+
+	// UpdateEmployee обновляет данные сотрудника.
+	// Возвращает ошибку, если сотрудник не найден или произошла ошибка БД.
+	UpdateEmployee(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		empl *employee.Employee,
+	) error
+
+	// GetEmployee возвращает сотрудника по его ID.
+	// Возвращает nil и ошибку, если сотрудник не найден.
+	GetEmployee(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeId uuid.UUID,
+	) (*employee.Employee, error)
+
+	// GetEmployeesByCompanyId возвращает список сотрудников компании.
+	// Возвращает пустой слайс, если сотрудников нет.
+	GetEmployeesByCompanyId(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		companyId uuid.UUID,
+	) ([]*employee.Employee, error)
+
+	// DeleteEmployee удаляет сотрудника по ID.
+	// Возвращает ошибку, если сотрудник не найден или произошла ошибка БД.
+	DeleteEmployee(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeId uuid.UUID,
+	) error
+
+	// GetEmployeesByDepartment возвращает сотрудников по отделу.
+	GetEmployeesByDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		departmentId uuid.UUID,
+	) ([]*employee.Employee, error)
+
+	// ExistsEmployee проверяет, существует ли сотрудник с таким ID.
+	ExistsEmployee(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeId uuid.UUID,
+	) (bool, error)
+
+	// CountEmployees возвращает количество сотрудников в компании.
+	CountEmployees(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		companyId uuid.UUID,
+	) (int, error)
+
+	// SetEmployeeStatus изменяет статус сотрудника (активен/уволен).
+	SetEmployeeStatus(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeId uuid.UUID,
+		isActive bool,
+	) error
+}
+
 type positionDB interface{}
 type departmentDB interface{}
 type departmentEmployeeDB interface{}
