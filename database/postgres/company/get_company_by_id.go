@@ -10,13 +10,13 @@ import (
 	"github.com/google/uuid"
 )
 
-func (r *PostgresCompany) GetCompanyByID(
+func (r PostgresCompany) GetCompanyByID(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	id uuid.UUID,
 ) (*company.Company, error) {
 	if sharedTx == nil {
-		return nil, errors.New("transaction is required")
+		return nil, errors.New("start transaction before query")
 	}
 
 	query := `

@@ -1,34 +1,41 @@
-package company
+package position
 
 import (
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
 
-func (r PostgresCompany) DeleteCompany(
+func (p PostgresPosition) DeletePosition(
 	ctx context.Context,
 	sharedTx *sql.Tx,
-	id uuid.UUID,
+	positionId uuid.UUID,
 ) error {
 	if sharedTx == nil {
 		return errors.New("start transaction before query")
 	}
 
 	query := `
-        UPDATE companies 
-        SET is_active = false,
-            updated_at = NOW()
-        WHERE id = $1
-        AND is_active = true
+        UPDATE positions
+        SET 
+            is_active = false,
+            updated_at = $1
+        WHERE id = $2
     `
 
-	result, err := sharedTx.ExecContext(ctx, query, id)
+	result, err := sharedTx.ExecContext(
+		ctx,
+		query,
+		time.Now(),
+		positionId,
+	)
+
 	if err != nil {
-		return fmt.Errorf("failed to delete company: %w", err)
+		return fmt.Errorf("failed to delete position: %w", err)
 	}
 
 	rowsAffected, err := result.RowsAffected()
@@ -37,7 +44,7 @@ func (r PostgresCompany) DeleteCompany(
 	}
 
 	if rowsAffected == 0 {
-		return fmt.Errorf("company not found or already deleted")
+		return fmt.Errorf("position not found (id: %s)", positionId)
 	}
 
 	return nil

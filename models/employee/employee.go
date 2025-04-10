@@ -1,19 +1,19 @@
 package employee
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Employee struct {
-	Id         uuid.UUID
-	UserId     uuid.UUID
-	CompanyId  uuid.UUID
-	PositionId uuid.UUID
-}
-
-func NewEmployee(newId, userId, companyId, positionId uuid.UUID) *Employee {
-	return &Employee{
-		Id:         newId,
-		UserId:     userId,
-		CompanyId:  companyId,
-		PositionId: positionId,
-	}
+	ID             uuid.UUID  `json:"id"`
+	UserID         uuid.UUID  `json:"user_id"`
+	CompanyID      uuid.UUID  `json:"company_id"`
+	PositionID     uuid.UUID  `json:"position_id"`
+	IsActive       bool       `json:"is_active"`
+	IsOnline       bool       `json:"is_online"`
+	LastActivityAt *time.Time `json:"last_activity_at,omitempty"`
+	CreatedAt      time.Time  `json:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at"`
 }

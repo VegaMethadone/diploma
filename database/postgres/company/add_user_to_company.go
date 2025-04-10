@@ -10,14 +10,14 @@ import (
 	"github.com/lib/pq"
 )
 
-func (r *PostgresCompany) AddUserToCompany(
+func (r PostgresCompany) AddUserToCompany(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	userID uuid.UUID,
 	companyID uuid.UUID,
 ) error {
 	if sharedTx == nil {
-		return errors.New("transaction is required")
+		return errors.New("start transaction before query")
 	}
 
 	query := `

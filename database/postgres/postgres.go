@@ -7,6 +7,7 @@ import (
 	"labyrinth/config"
 	"labyrinth/models/company"
 	"labyrinth/models/employee"
+	"labyrinth/models/position"
 	"labyrinth/models/user"
 
 	"github.com/google/uuid"
@@ -109,7 +110,6 @@ type companyDB interface {
 
 type employeeDB interface {
 	// CreateEmployee создает нового сотрудника в базе данных.
-	// Возвращает ошибку, если операция не удалась.
 	CreateEmployee(
 		ctx context.Context,
 		sharedTx *sql.Tx,
@@ -117,7 +117,6 @@ type employeeDB interface {
 	) error
 
 	// UpdateEmployee обновляет данные сотрудника.
-	// Возвращает ошибку, если сотрудник не найден или произошла ошибка БД.
 	UpdateEmployee(
 		ctx context.Context,
 		sharedTx *sql.Tx,
@@ -125,35 +124,25 @@ type employeeDB interface {
 	) error
 
 	// GetEmployee возвращает сотрудника по его ID.
-	// Возвращает nil и ошибку, если сотрудник не найден.
-	GetEmployee(
+	GetEmployeeByUserId(
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		employeeId uuid.UUID,
 	) (*employee.Employee, error)
 
 	// GetEmployeesByCompanyId возвращает список сотрудников компании.
-	// Возвращает пустой слайс, если сотрудников нет.
 	GetEmployeesByCompanyId(
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		companyId uuid.UUID,
 	) ([]*employee.Employee, error)
 
-	// DeleteEmployee удаляет сотрудника по ID.
-	// Возвращает ошибку, если сотрудник не найден или произошла ошибка БД.
+	// DeleteEmployee is_active = false
 	DeleteEmployee(
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		employeeId uuid.UUID,
 	) error
-
-	// GetEmployeesByDepartment возвращает сотрудников по отделу.
-	GetEmployeesByDepartment(
-		ctx context.Context,
-		sharedTx *sql.Tx,
-		departmentId uuid.UUID,
-	) ([]*employee.Employee, error)
 
 	// ExistsEmployee проверяет, существует ли сотрудник с таким ID.
 	ExistsEmployee(
@@ -168,18 +157,52 @@ type employeeDB interface {
 		sharedTx *sql.Tx,
 		companyId uuid.UUID,
 	) (int, error)
-
-	// SetEmployeeStatus изменяет статус сотрудника (активен/уволен).
-	SetEmployeeStatus(
-		ctx context.Context,
-		sharedTx *sql.Tx,
-		employeeId uuid.UUID,
-		isActive bool,
-	) error
 }
 
-type positionDB interface{}
-type departmentDB interface{}
+type positionDB interface {
+	// CreatePosition создает новую должность в компании
+	CreatePosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		position *position.Position,
+	) error
+
+	// GetPositionById возвращает должность по UUID
+	GetPositionById(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		positionId uuid.UUID,
+	) (*position.Position, error)
+
+	// GetPositionsByCompanyId возвращает все активные должности компании
+	GetPositionsByCompanyId(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		companyId uuid.UUID,
+	) ([]*position.Position, error)
+
+	// UpdatePosition обновляет данные должности
+	UpdatePosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		position *position.Position,
+	) error
+
+	// DeletePosition мягко удаляет должность (is_active = false)
+	DeletePosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		positionId uuid.UUID,
+	) error
+}
+type departmentDB interface {
+	// GetEmployeesByDepartment возвращает сотрудников по отделу.
+	GetEmployeesByDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		departmentId uuid.UUID,
+	) ([]*employee.Employee, error)
+}
 type departmentEmployeeDB interface{}
 
 type departmentEmployeePositionDB interface{}

@@ -9,13 +9,13 @@ import (
 	"github.com/google/uuid"
 )
 
-func (r *PostgresCompany) DeactivateCompanyUsers(
+func (r PostgresCompany) DeactivateCompanyUsers(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	companyID uuid.UUID,
 ) error {
 	if sharedTx == nil {
-		return errors.New("transaction is required")
+		return errors.New("start transaction before query")
 	}
 
 	query := `

@@ -1,4 +1,4 @@
-package company
+package employee
 
 import (
 	"context"
@@ -9,26 +9,31 @@ import (
 	"github.com/google/uuid"
 )
 
-func (r PostgresCompany) DeleteCompany(
+func (p PostgresEmployee) DeleteEmployee(
 	ctx context.Context,
 	sharedTx *sql.Tx,
-	id uuid.UUID,
+	employeeId uuid.UUID,
 ) error {
 	if sharedTx == nil {
 		return errors.New("start transaction before query")
 	}
 
 	query := `
-        UPDATE companies 
-        SET is_active = false,
-            updated_at = NOW()
+        UPDATE employee_company
+        SET 
+            is_active = false,
+            updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
-        AND is_active = true
     `
 
-	result, err := sharedTx.ExecContext(ctx, query, id)
+	result, err := sharedTx.ExecContext(
+		ctx,
+		query,
+		employeeId,
+	)
+
 	if err != nil {
-		return fmt.Errorf("failed to delete company: %w", err)
+		return fmt.Errorf("failed to deactivate employee: %w", err)
 	}
 
 	rowsAffected, err := result.RowsAffected()
@@ -37,7 +42,7 @@ func (r PostgresCompany) DeleteCompany(
 	}
 
 	if rowsAffected == 0 {
-		return fmt.Errorf("company not found or already deleted")
+		return fmt.Errorf("employee not found (id: %s)", employeeId)
 	}
 
 	return nil

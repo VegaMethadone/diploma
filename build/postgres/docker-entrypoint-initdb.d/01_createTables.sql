@@ -62,3 +62,25 @@ CREATE TABLE IF NOT EXISTS companies (
     email VARCHAR(255),
     tax_number VARCHAR(50)
 );
+
+CREATE TABLE IF NOT EXISTS employee_company (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID,
+    company_id UUID,
+    position_id UUID,
+    is_active BOOLEAN DEFAULT true,
+    is_online BOOLEAN DEFAULT false,
+    last_activity_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS positions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_id UUID,
+    lvl INTEGER,
+    name TEXT,
+    is_active BOOLEAN,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);

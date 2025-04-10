@@ -10,13 +10,13 @@ import (
 	"github.com/lib/pq"
 )
 
-func (r *PostgresCompany) CreateCompany(
+func (r PostgresCompany) CreateCompany(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	company *company.Company,
 ) error {
 	if sharedTx == nil {
-		return errors.New("transaction is required")
+		return errors.New("start transaction before query")
 	}
 
 	query := `
