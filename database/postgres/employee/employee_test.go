@@ -103,6 +103,17 @@ func TestEmployeeCRUD(t *testing.T) {
 		}
 	})
 
+	t.Run("GetEmployeesByCompanyId", func(t *testing.T) {
+		fetchedEmployees, err := pe.GetEmployeesByCompanyId(ctx, tx, testEmployee.CompanyID)
+		if err != nil {
+			t.Fatalf("GetEmployeesByCompanyId failed: %v\n", err)
+		}
+
+		if len(fetchedEmployees) != 1 {
+			t.Errorf("Expected size of arr 1, got %d\n", len(fetchedEmployees))
+		}
+	})
+
 	t.Run("UpdateEmployee", func(t *testing.T) {
 		updatedEmployee := *testEmployee
 		updatedEmployee.UpdatedAt = time.Now()
@@ -119,19 +130,8 @@ func TestEmployeeCRUD(t *testing.T) {
 		if err != nil {
 			t.Fatalf("GetEmployeeByUserId failed: %v\n", err)
 		}
-		if !fetchedEmployee.IsActive {
+		if fetchedEmployee.IsActive {
 			t.Errorf("Expected false, got true\n")
-		}
-	})
-
-	t.Run("GetEmployeesByCompanyId", func(t *testing.T) {
-		fetchedEmployees, err := pe.GetEmployeesByCompanyId(ctx, tx, testEmployee.CompanyID)
-		if err != nil {
-			t.Fatalf("GetEmployeesByCompanyId failed: %v\n", err)
-		}
-
-		if len(fetchedEmployees) != 1 {
-			t.Errorf("Expected size of arr 1, got %d\n", len(fetchedEmployees))
 		}
 	})
 

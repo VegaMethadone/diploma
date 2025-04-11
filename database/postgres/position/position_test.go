@@ -97,7 +97,7 @@ func TestPositionCRUD(t *testing.T) {
 		}
 
 		for _, value := range fetchedPositions {
-			if value.CompanyID != testPosition.ID {
+			if value.CompanyID != testPosition.CompanyID {
 				t.Errorf("Expected companyId %q, got %q", testPosition.CompanyID, value.CompanyID)
 			}
 		}
