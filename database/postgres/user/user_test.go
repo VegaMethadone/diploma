@@ -125,10 +125,9 @@ func TestUserCRUD(t *testing.T) {
 		}
 	})
 
-	// Если все тесты прошли успешно, коммитим транзакцию
 	if !t.Failed() {
-		if err := tx.Commit(); err != nil {
-			t.Errorf("Failed to commit transaction: %v", err)
+		if err := tx.Rollback(); err != nil {
+			t.Errorf("Failed to rollback transaction: %v", err)
 		}
 	}
 }
