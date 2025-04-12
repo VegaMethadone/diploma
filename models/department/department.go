@@ -1,23 +1,19 @@
 package department
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Department struct {
-	Id          uuid.UUID `json: "id"`
-	CompanyId   uuid.UUID `json: "companyId"`
-	OwnerId     uuid.UUID `json: "ownerId"`
-	Name        string    `json: "name"`
-	Description string    `json: "description"`
-	Parent      uuid.UUID `json: "parent"`
-}
-
-func NewDepartment(newId, companyId, employeeId, parent uuid.UUID, name, descritpion string) *Department {
-	return &Department{
-		Id:          newId,
-		CompanyId:   companyId,
-		OwnerId:     employeeId,
-		Name:        name,
-		Description: descritpion,
-		Parent:      parent,
-	}
+	ID          uuid.UUID `json:"id"`
+	CompanyID   uuid.UUID `json:"companyId"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	AvatarURL   string    `json:"avatarUrl"` // Добавлено из таблицы
+	ParentID    uuid.UUID `json:"parent"`    // Соответствует полю parent_id в таблице
+	CreatedAt   time.Time `json:"createdAt"` // Добавлено из таблицы
+	UpdatedAt   time.Time `json:"updatedAt"` // Добавлено из таблицы
+	IsActive    bool      `json:"isActive"`  // Добавлено из таблицы
 }

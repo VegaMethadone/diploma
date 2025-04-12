@@ -84,3 +84,15 @@ CREATE TABLE IF NOT EXISTS positions (
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS departments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_id UUID,
+    name TEXT,
+    description TEXT,
+    avatar_url TEXT,
+    parent_id UUID,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT true
+);
