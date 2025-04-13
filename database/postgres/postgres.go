@@ -13,6 +13,14 @@ import (
 	"labyrinth/models/position"
 	"labyrinth/models/user"
 
+	dbCompnay "labyrinth/database/postgres/company"
+	dbDepartment "labyrinth/database/postgres/department"
+	dbDepemployee "labyrinth/database/postgres/depemployee"
+	dbDepPosition "labyrinth/database/postgres/depposition"
+	dbEmployee "labyrinth/database/postgres/employee"
+	dbPosition "labyrinth/database/postgres/position"
+	dbUser "labyrinth/database/postgres/user"
+
 	"github.com/google/uuid"
 )
 
@@ -23,7 +31,7 @@ type userDB interface {
 		// db *sql.DB,
 		sharedTx *sql.Tx,
 		u *user.User,
-	) (*user.User, error)
+	) error
 
 	// GetUserByCredentials ищет пользователя по логину и проверяет пароль
 	GetUserByCredentials(
@@ -293,7 +301,7 @@ type departmentEmployeePositionDB interface {
 	UpdateDepartmentPosition(
 		ctx context.Context,
 		sharedTx *sql.Tx,
-		position **depposition.DepPosition,
+		position *depposition.DepPosition,
 	) error
 
 	// GetDepartmentPositionById возвращает должность по ID
@@ -333,6 +341,18 @@ type PostgresDB struct {
 	Department                 departmentDB
 	DepartmentEmployee         departmentEmployeeDB
 	DepartmentEmployeePosition departmentEmployeePositionDB
+}
+
+func NewPostgresDB() PostgresDB {
+	return PostgresDB{
+		User:                       dbUser.NewPostgresUser(),
+		Company:                    dbCompnay.NewPostgresCompany(),
+		Employee:                   dbEmployee.NewPostgresEmployee(),
+		Position:                   dbPosition.NewPostgresPosition(),
+		Department:                 dbDepartment.NewPostgresDepartment(),
+		DepartmentEmployee:         dbDepemployee.NewPostgresEmployeeDepartment(),
+		DepartmentEmployeePosition: dbDepPosition.NewPostgresDepPosition(),
+	}
 }
 
 func GetConnection() string {
