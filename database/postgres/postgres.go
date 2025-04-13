@@ -7,6 +7,7 @@ import (
 	"labyrinth/config"
 	"labyrinth/models/company"
 	"labyrinth/models/department"
+	"labyrinth/models/depemployee"
 	"labyrinth/models/employee"
 	"labyrinth/models/position"
 	"labyrinth/models/user"
@@ -233,16 +234,50 @@ type departmentDB interface {
 	) error
 }
 
-type departmentEmployeeDB interface { // CreateEmployeeDepartment
+type departmentEmployeeDB interface {
+	// CreateEmployeeDepartment создает связь сотрудника с отделом
+	CreateEmployeeDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		department *depemployee.DepartmentEmployee,
+	) error
 
-	// UpdateEmployeeDepartment
+	// ExistsEmployeeDepartment проверяет существование связи
+	ExistsEmployeeDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeID uuid.UUID,
+		departmentID uuid.UUID,
+	) (bool, error)
 
-	// DeleteEmployeeDepartment
+	// UpdateEmployeeDepartment обновляет данные связи
+	UpdateEmployeeDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		department *depemployee.DepartmentEmployee,
+	) error
 
-	// GetEmployeeDepartmentByUserId
+	// GetEmployeeDepartmentByUserId возвращает все отделы сотрудника
+	GetEmployeeDepartmentByEmployeeId(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		employeeID uuid.UUID,
+		departmentID uuid.UUID,
+	) (*depemployee.DepartmentEmployee, error)
 
-	//  GetEmployeesDepartmentByDepartmentId
+	// GetEmployeesDepartmentByDepartmentId возвращает всех сотрудников отдела
+	GetEmployeesDepartmentByDepartmentId(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		departmentID uuid.UUID,
+	) ([]*depemployee.DepartmentEmployee, error)
 
+	// DeleteEmployeeDepartment удаляет связь сотрудника с отделом
+	DeleteEmployeeDepartment(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		depemployeeID uuid.UUID,
+	) error
 }
 
 type departmentEmployeePositionDB interface{}

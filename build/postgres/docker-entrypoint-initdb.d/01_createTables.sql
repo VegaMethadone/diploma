@@ -96,3 +96,13 @@ CREATE TABLE IF NOT EXISTS departments (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT true
 );
+
+CREATE TABLE IF NOT EXISTS employee_department (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    employee_id UUID NOT NULL,
+    department_id UUID NOT NULL,
+    position_id UUID,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT true
+);
