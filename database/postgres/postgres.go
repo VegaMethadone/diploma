@@ -8,6 +8,7 @@ import (
 	"labyrinth/models/company"
 	"labyrinth/models/department"
 	"labyrinth/models/depemployee"
+	"labyrinth/models/depposition"
 	"labyrinth/models/employee"
 	"labyrinth/models/position"
 	"labyrinth/models/user"
@@ -280,7 +281,49 @@ type departmentEmployeeDB interface {
 	) error
 }
 
-type departmentEmployeePositionDB interface{}
+type departmentEmployeePositionDB interface {
+	// CreateDepartmentPosition создает новую должность в отделе
+	CreateDepartmentPosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		position *depposition.DepPosition,
+	) error
+
+	// UpdateDepartmentPosition обновляет данные должности
+	UpdateDepartmentPosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		position **depposition.DepPosition,
+	) error
+
+	// GetDepartmentPositionById возвращает должность по ID
+	GetDepartmentPositionById(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		positionID uuid.UUID,
+	) (*depposition.DepPosition, error)
+
+	// GetDepartmentPositionsByDepartmentId возвращает все должности отдела
+	GetDepartmentPositionsByDepartmentId(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		departmentID uuid.UUID,
+	) ([]*depposition.DepPosition, error)
+
+	// DeleteDepartmentPosition удаляет должность
+	DeleteDepartmentPosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		positionID uuid.UUID,
+	) error
+
+	// ExistsPosition проверяет существование должности
+	ExistsPosition(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		positionID uuid.UUID,
+	) (bool, error)
+}
 
 type PostgresDB struct {
 	User                       userDB
