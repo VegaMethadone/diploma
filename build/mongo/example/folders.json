@@ -1,0 +1,97 @@
+{
+    "_id": ObjectId("65f8b5e1c1b1a2b3c4d5e6f7"),  // Уникальный идентификатор документа
+    "isPrimary": false,
+    "version": "1.0.0",  // Версия документа
+    "metadata": {
+        "company_id": "company_id",  // Уникальный идентификатор компании
+        "division_id": "division_id",  // Уникальный идентификатор подразделения
+        "title": "Some Title",  // Название документа
+        "description": "This document represents the initial workspace for the company division.",  // Описание документа
+        "tags": ["own tags", "to find", "faster"],  // Теги для поиска и классификации
+        "created": {
+            "date": "2024-02-19",  // Дата создания
+            "time": "16:32:59",  // Время создания
+            "author": "employee_id"  // Автор создания
+        },
+        "last_update": {
+            "date": "2025-02-20",  // Дата последнего обновления
+            "time": "16:33:00",  // Время последнего обновления
+            "author": "employee_id"  // Автор последнего обновления
+        },
+        "access_rules": {
+            "access_denied": ["employee_id_1", "employee_id_2"],  // Кому доступ запрещён
+            "access_allowed": ["employee_id_3", "employee_id_4"],  // Кому доступ разрешён
+            "read_only": ["employee_id_5", "employee_id_6"],  // Кто может только читать
+            "comment_only": ["employee_id_7", "employee_id_8"],  // Кто может только комментировать
+            "access_level": "access_target"  // Уровень доступа (например, "public", "private")
+        },
+        "links": {
+            "read": "link_to_read",  // Ссылка для чтения
+            "comment": "link_to_comment",  // Ссылка для комментирования
+            "write": "link_to_write",  // Ссылка для редактирования
+            "active_links": []  // Активные ссылки (например, для динамического контента)
+        }
+    },
+    "folders": [  // Массив корневых папок
+        {
+            "folder_id": ObjectId("65f8b5e1c1b1a2b3c4d5e6f8"),  // Уникальный идентификатор папки
+            "title": "Some Title",  // Название папки
+            "description": "Some text",  // Описание папки
+            "access_rules": {  // Правила доступа к папке
+                "access_denied": ["employee_id_1", "employee_id_2"],
+                "access_allowed": ["employee_id_3", "employee_id_4"],
+                "read_only": ["employee_id_5", "employee_id_6"],
+                "comment_only": ["employee_id_7", "employee_id_8"],
+                "access_level": "access_target"
+            }
+        },
+        {
+            "folder_id": ObjectId("65f8b5e1c1b1a2b3c4d5e6f9"),
+            "title": "Another Folder",
+            "description": "Another folder description",
+            "access_rules": {
+                "access_denied": ["employee_id_9"],
+                "access_allowed": ["employee_id_10"],
+                "read_only": ["employee_id_11"],
+                "comment_only": ["employee_id_12"],
+                "access_level": "access_target"
+            }
+        }
+    ],
+    "files": [  // Массив корневых файлов
+        {
+            "file_id": ObjectId("65f8b5e1c1b1a2b3c4d5e6fa"),  // Уникальный идентификатор файла
+            "title": "Some title",  // Название файла
+            "description": "Some description",  // Описание файла
+            "type": "pdf",  // Тип файла
+            "size": 1024,  // Размер файла в байтах
+            "created": {  // Дата и время создания файла
+                "date": "2024-02-19",
+                "time": "16:32:59",
+                "author": "employee_id"
+            },
+            "updated": {  // Дата и время последнего обновления файла
+                "date": "2025-02-20",
+                "time": "16:33:00",
+                "author": "employee_id"
+            }
+        },
+        {
+            "file_id": ObjectId("65f8b5e1c1b1a2b3c4d5e6fb"),
+            "title": "Another File",
+            "description": "Another file description",
+            "type": "docx",
+            "size": 2048,
+            "created": {
+                "date": "2024-02-19",
+                "time": "16:32:59",
+                "author": "employee_id"
+            },
+            "updated": {
+                "date": "2025-02-20",
+                "time": "16:33:00",
+                "author": "employee_id"
+            }
+        }
+    ]
+}
