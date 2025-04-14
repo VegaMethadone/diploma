@@ -1,6 +1,8 @@
 package notebook
 
-type Block interface {
-	GetType() int64
-	GetId() string
+type BlockInterface interface {
+	GetType() string
+	GetId() int
+	GetBody() any
+	GetComments()
 }
