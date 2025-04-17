@@ -3,12 +3,12 @@ package journal
 import (
 	"time"
 
-	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Notebook struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	ID       primitive.ObjectID `bson:"id"`
+	UuidID   string             `bson:"uuid_id"`
 	Version  string             `bson:"version"`
 	Metadata Metadata           `bson:"metadata"`
 	Blocks   []Block            `bson:"blocks"`
@@ -47,16 +47,16 @@ type Links struct {
 }
 
 type Block struct {
-	BlockType    string
-	BlockId      int
-	BlockBody    any
-	BlockComment []Comment
+	Id      int            `bson:"id"`
+	Type    string         `bson:"type"`
+	Body    map[string]any `bson:"body"`
+	Comment []Comment      `bson:"comments"`
 }
 
 type Comment struct {
-	EmployeeId uuid.UUID
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Comment    string
-	SubComment []*Comment
+	EmployeeId string     `bson:"employee_id"`
+	CreatedAt  time.Time  `bson:"created_at"`
+	UpdatedAt  time.Time  `bson:"updated_at"`
+	Comment    string     `bson:"comment"`
+	SubComment []*Comment `bson:"sub_comments"`
 }

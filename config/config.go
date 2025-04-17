@@ -17,14 +17,14 @@ var Conf = &Config{
 		Port:         "5432",      // Порт PostgreSQL
 		Username:     "postgres",  // Имя пользователя
 		Password:     "0000",      // Пароль
-		DatabaseName: "testDB",    // Имя базы данных
+		DatabaseName: "labyrinth", // Имя базы данных
 		SSLMode:      "disable",   // Режим SSL
 	},
 	Mongo: Mongo{
 		URI:          "mongodb://localhost:27017", // URI MongoDB
 		DatabaseName: "mydb",                      // Имя базы данных
 		Username:     "user",                      // Имя пользователя
-		Password:     "password",                  // Пароль
+		Password:     "0000",                      // Пароль
 		AuthSource:   "admin",                     // Источник аутентификации
 	},
 	Redis: Redis{
