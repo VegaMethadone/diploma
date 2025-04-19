@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"labyrinth/config"
+	"labyrinth/notebook/models/directory"
 	"labyrinth/notebook/models/permission"
 	"time"
 
@@ -24,16 +25,48 @@ type notebookMongo interface {
 }
 
 type folderMongo interface {
-	// CreateFolder
+	// CreateFolder создает новую папку
+	CreateFolder(
+		ctx context.Context,
+		tx *mongo.Session,
+		folder *directory.Directory,
+	) error
 
-	// UpdateFolder
+	// UpdateFolder обновляет существующую папку
+	UpdateFolder(
+		ctx context.Context,
+		tx *mongo.Session,
+		folderId string,
+		updateData *directory.Directory,
+	) error
 
-	// GetFolderByFolderId
+	// GetFolderByFolderId возвращает папку по её ID
+	GetFolderByFolderId(
+		ctx context.Context,
+		tx *mongo.Session,
+		folderId string,
+	) (*directory.Directory, error)
 
-	// GetFoldersByParentId
+	// GetFoldersByParentId возвращает все папки по ID родительской папки
+	GetFoldersByParentId(
+		ctx context.Context,
+		tx *mongo.Session,
+		parentId string,
+		opts ...*options.FindOptions,
+	) ([]*directory.Directory, error)
 
-	// DeleteFolder
+	// DeleteFolder удаляет папку по ID
+	DeleteFolder(
+		ctx context.Context,
+		tx *mongo.Session,
+		folderId string,
+	) error
 
+	// ExistsFolder проверяет существование папки
+	ExistsFolder(
+		ctx context.Context,
+		folderId string,
+	) (bool, error)
 }
 
 type permissionMongo interface {
@@ -69,6 +102,7 @@ type permissionMongo interface {
 	//  ExistsPermission проверяет сущестует ли  объект в коллекции
 	ExistsPermission(
 		ctx context.Context,
+		tx *mongo.Session,
 		uuidId string,
 	) (bool, error)
 }

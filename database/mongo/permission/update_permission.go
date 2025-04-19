@@ -40,7 +40,7 @@ func (r *PermissionMongo) UpdatePermission(
 			sc,
 			bson.M{"uuid_id": uuidId},
 			update,
-			options.Update().SetUpsert(false), // Явно запрещаем upsert
+			options.Update().SetUpsert(false),
 		)
 		return err
 	})
