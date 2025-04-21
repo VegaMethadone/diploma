@@ -1,40 +1,40 @@
-package permission
+package notebook
 
 import (
 	"context"
 	"errors"
 	"fmt"
-	"labyrinth/notebook/models/permission"
+	"labyrinth/notebook/models/journal"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (r PermissionMongo) GetPermissionByUuidId(
+func (r *NotebookMongo) GetNotebookById(
 	ctx context.Context,
 	tx *mongo.Session,
-	uuidId string,
-) (*permission.Permission, error) {
+	notebookId string,
+) (*journal.Notebook, error) {
 	if tx == nil {
 		return nil, errors.New("transaction session is required")
 	}
-	if uuidId == "" {
-		return nil, errors.New("uuid_id cannot be empty")
+	if notebookId == "" {
+		return nil, errors.New("notebookId cannot be empty")
 	}
 
-	filter := bson.M{"uuid_id": uuidId}
-	var result permission.Permission
+	filter := bson.M{"uuid_id": notebookId}
+	var notebook journal.Notebook
 
 	err := mongo.WithSession(ctx, *tx, func(sc mongo.SessionContext) error {
-		return r.collection.FindOne(sc, filter).Decode(&result)
+		return r.collection.FindOne(sc, filter).Decode(&notebook)
 	})
 
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, fmt.Errorf("permission not found")
+			return nil, fmt.Errorf("notebook not found")
 		}
 		return nil, fmt.Errorf("database error: %w", err)
 	}
 
-	return &result, nil
+	return &notebook, nil
 }

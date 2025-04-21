@@ -28,7 +28,7 @@ func setup() error {
 		return fmt.Errorf("failed to connect to MongoDB: %w", err)
 	}
 
-	testDB = client.Database("permission")
+	testDB = client.Database("permission_test")
 
 	testPermission = &p.Permission{
 		ID:           primitive.NewObjectID(),
@@ -79,7 +79,7 @@ func TestPermissionCRUD(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	repo := permission.NewPermissionMongo(testDB, "permission")
+	repo := permission.NewPermissionMongo(testDB, "permission_test")
 
 	session, err := client.StartSession()
 	if err != nil {

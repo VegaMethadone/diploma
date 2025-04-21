@@ -21,9 +21,9 @@ func (r *FolderMongo) ExistsFolder(
 	if folderUUID == "" {
 		return false, errors.New("folder UUID cannot be empty")
 	}
+
 	var exists bool
 	var err error
-
 	err = mongo.WithSession(ctx, *sess, func(sc mongo.SessionContext) error {
 		count, err := r.collection.CountDocuments(
 			sc,

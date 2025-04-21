@@ -22,21 +22,13 @@ type Metadata struct {
 	Tags        []string       `bson:"tags"`
 	Created     DateTimeAuthor `bson:"created"`
 	LastUpdate  DateTimeAuthor `bson:"last_update"`
-	AccessRules AccessRules    `bson:"access_rules"`
 	Links       Links          `bson:"links"`
 }
 
 type DateTimeAuthor struct {
-	Date   string `bson:"date"`
-	Time   string `bson:"time"`
-	Author string `bson:"author"`
-}
-type AccessRules struct {
-	AccessDenied  []string `bson:"access_denied"`
-	AccessAllowed []string `bson:"access_allowed"`
-	ReadOnly      []string `bson:"read_only"`
-	CommentOnly   []string `bson:"comment_only"`
-	AccessLevel   string   `bson:"access_level"`
+	Date   time.Time `bson:"date"`
+	Time   time.Time `bson:"time"`
+	Author string    `bson:"author"`
 }
 
 type Links struct {
@@ -54,9 +46,9 @@ type Block struct {
 }
 
 type Comment struct {
-	EmployeeId string     `bson:"employee_id"`
-	CreatedAt  time.Time  `bson:"created_at"`
-	UpdatedAt  time.Time  `bson:"updated_at"`
-	Comment    string     `bson:"comment"`
-	SubComment []*Comment `bson:"sub_comments"`
+	EmployeeId string    `bson:"employee_id"`
+	CreatedAt  time.Time `bson:"created_at"`
+	UpdatedAt  time.Time `bson:"updated_at"`
+	Comment    string    `bson:"comment"`
+	SubComment []Comment `bson:"sub_comments"`
 }

@@ -28,7 +28,7 @@ func setup() error {
 		return fmt.Errorf("failed to connect to MongoDB: %w", err)
 	}
 
-	testDB = client.Database("folder")
+	testDB = client.Database("folder_test")
 
 	testDirectory = &directory.Directory{
 		ID:        primitive.NewObjectID(),
@@ -117,7 +117,7 @@ func TestFolderCRUD(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	repo := folder.NewFolderMongo(testDB, "folder")
+	repo := folder.NewFolderMongo(testDB, "folder_test")
 
 	session, err := client.StartSession()
 	if err != nil {

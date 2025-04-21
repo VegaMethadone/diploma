@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"labyrinth/config"
 	"labyrinth/notebook/models/directory"
+	"labyrinth/notebook/models/journal"
 	"labyrinth/notebook/models/permission"
 	"time"
 
@@ -14,14 +15,40 @@ import (
 
 type notebookMongo interface {
 	// CreateNotebook
+	CreateNotebook(
+		ctx context.Context,
+		tx *mongo.Session,
+		notebook *journal.Notebook,
+	) error
 
 	// UpdateNotebook
+	UpdateNotebook(
+		ctx context.Context,
+		tx *mongo.Session,
+		notebookId string,
+		notebook *journal.Notebook,
+	) error
+
+	// ExistsNotebook
+	ExistsNotebook(
+		ctx context.Context,
+		tx *mongo.Session,
+		notebookId string,
+	) (bool, error)
 
 	// GetNodebookById
-
-	// GetNotebooksById
+	GetNodebookById(
+		ctx context.Context,
+		tx *mongo.Session,
+		notebookId string,
+	) (journal.Notebook, error)
 
 	// DeleteNotebook
+	DeleteNotebook(
+		ctx context.Context,
+		tx *mongo.Session,
+		notebookId string,
+	) error
 }
 
 type folderMongo interface {
@@ -65,6 +92,7 @@ type folderMongo interface {
 	// ExistsFolder проверяет существование папки
 	ExistsFolder(
 		ctx context.Context,
+		sess *mongo.Session,
 		folderId string,
 	) (bool, error)
 }
