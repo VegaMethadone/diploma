@@ -6,8 +6,8 @@ type BucketMINIO struct {
 	Client *minio.Client
 }
 
-func NewBucketMINIO(client *minio.Client) BucketMINIO {
-	return BucketMINIO{
+func NewBucketMINIO(client *minio.Client) *BucketMINIO {
+	return &BucketMINIO{
 		Client: client,
 	}
 }

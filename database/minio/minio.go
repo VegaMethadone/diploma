@@ -3,6 +3,8 @@ package minio
 import (
 	"context"
 	"io"
+	"labyrinth/database/minio/bucket"
+	"labyrinth/database/minio/file"
 
 	"github.com/minio/minio-go/v7"
 )
@@ -37,7 +39,7 @@ type minioFile interface {
 		file io.Reader,
 		objectSize int64,
 		opts minio.PutObjectOptions,
-	) (minio.UploadInfo, error)
+	) error
 
 	// DownloadFile скачивает файл из MinIO
 	DownloadFile(
@@ -68,4 +70,9 @@ type MinioDB struct {
 	File   minioFile
 }
 
-func NewMinioDB() {}
+func NewMinioDB(client *minio.Client) *MinioDB {
+	return &MinioDB{
+		Bucket: bucket.NewBucketMINIO(client),
+		File:   file.NewFileMINIO(client),
+	}
+}
