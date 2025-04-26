@@ -25,3 +25,25 @@ type User struct {
 	IsActive         bool      `json:"is_active"`         // Активен ли аккаунт
 	IsStaff          bool      `json:"is_staff"`          // Персонал/админ
 }
+
+func NewUser(mail, password, phone string) *User {
+	return &User{
+		ID:               uuid.New(),
+		Login:            mail,
+		PasswordHash:     password,
+		Email:            mail,
+		EmailVerified:    false,
+		Phone:            phone,
+		PhoneVerified:    false,
+		FirstName:        "",
+		LastName:         "",
+		Bio:              "",
+		TelegramUsername: "",
+		AvatarURL:        "",
+		CreatedAt:        time.Now(),
+		UpdatedAt:        time.Now(),
+		LastLoginAt:      time.Now(),
+		IsActive:         true,
+		IsStaff:          false,
+	}
+}

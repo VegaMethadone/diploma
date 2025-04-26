@@ -125,6 +125,17 @@ func TestUserCRUD(t *testing.T) {
 		}
 	})
 
+	t.Run("CheckPhone", func(t *testing.T) {
+		exists, err := pu.CheckPhone(ctx, tx, "+77775553535")
+		if err != nil {
+			t.Fatalf("CheckPhone failed: %v", err)
+		}
+
+		if !exists {
+			t.Errorf("Expected phone exists = true, got phone exists = false")
+		}
+	})
+
 	if !t.Failed() {
 		if err := tx.Rollback(); err != nil {
 			t.Errorf("Failed to rollback transaction: %v", err)

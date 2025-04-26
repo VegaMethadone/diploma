@@ -8,42 +8,63 @@ import (
 
 /*
 
-app/
+labyrinth/
 ├── auth/
-│   ├── register       # POST - Регистрация
-│   ├── login          # POST - Авторизация
-│   └── reset-password # POST - Сброс пароля
+│   ├── register       # POST
+│   ├── login          # POST
+│   └── reset          # POST
 │
-├── ping               # GET - Проверка работы сервера
-├── onboarding         # GET/POST - Онбординг
+├── ping               # GET
+├── onboarding         # (не указан в коде)
 │
 └── user/
-    ├── {userId}/              # GET - Профиль пользователя
-    │   ├── companies          # GET - Список компаний
+    ├── {user_id}/             # GET
+    │   ├── profile           # GET, POST
     │   │
-    │   └── company/
-    │       ├── {companyId}           # GET - Дашборд компании
-    │       ├── {companyId}/invite    # POST - Приглашение в компанию
-    │       │
-    │       └── {companyId}/
-    │           ├── employees          # GET - Все сотрудники
-    │           │   └── {employeeId}   # GET/PUT/DELETE - Конкретный сотрудник
-    │           │
-    │           └── departments/       # GET - Все отделы
-    │               └── {departmentId} # GET/PUT/DELETE - Конкретный отдел
+    │   ├── company/          # GET, POST (опечатка сохранена)
+    │   │   ├── {company_id}          # GET
+    │   │   ├── profile               # GET, POST
+    │   │   ├── invite                # GET, POST
+    │   │   │
+    │   │   └── employee/             # GET, POST
+    │   │       └── {employee_id}     # GET, PUT, DELETE
+    │   │
+    │   └── company/                  # (опечатка в другом месте)
+    │       ├── {compnay_id}/         # GET, POST (опечатка)
+    │       │   ├── department/       # GET, POST
+    │       │   │   └── {department_id}  # GET, PUT, DELETE
+    │       │   │
+    │       │   └── notebook/         # GET, POST
+    │       │       └── {notebook_id} # GET, POST
     │
-    └── {userId}/settings # GET/PUT - Настройки пользователя
+    └── тут будет онбординг ?
 
 */
 
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("app/ping", handlers.Ping).Methods("GET")
+	r.HandleFunc("labyrinth/ping", handlers.Ping).Methods("GET")
 
-	// r.HandleFunc("app/register", handlers.RegisterUserHandler).Methods("POST")
-	// r.HandleFunc("app/login", handlers.LoginUserHandler).Methods("POST")
+	// r.HandleFunc("labyrinth/auth/register", handler).Methods("POST")
+	// r.HandleFunc("labyrinth/auth/login", handler).Methods("POST")
+	// r.HandleFunc("labyrinth/auth/reset", handler).Methods("POST")
 
-	// r.HandleFunc("app/companies", middleware.AuthMiddleware(handlers.GetCompaniesHandler)).Methods("GET")
-	// r.HandleFunc("app/company/{id}", middleware.AuthMiddleware(handlers.LoginCompanyHandler)).Methods("GET")
+	// r.HandleFunc("labyrinth/user/{user_id}", handler).Methods("GET")
+	// r.HandleFunc("labyrinth/user/{user_id}/profile", handler).Methods("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/compnay", handler).Methods("GET", "POST")
+
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}", handler).Methods("GET") где get - вход в комапию
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", handler).Methods("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/invite", handler).Methods("GET", "POST")
+
+	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/employee", handler).Methods("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/employee/{employee_id}", handler).Methods("GET", "PUT", "DELETE")
+
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department", handler).Methods("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department/{department_id}", handler).Methods("GET", "PUT", "DELETE")
+
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department/{department_id}/notebook").Method("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department/{department_id}/notebook/{notebook_id}").Method("GET", "POST")
+
 	return r
 }

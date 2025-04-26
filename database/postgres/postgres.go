@@ -20,6 +20,7 @@ import (
 	dbEmployee "labyrinth/database/postgres/employee"
 	dbPosition "labyrinth/database/postgres/position"
 	dbUser "labyrinth/database/postgres/user"
+	dbUuidvalidation "labyrinth/database/postgres/uuidValidation"
 
 	"github.com/google/uuid"
 )
@@ -65,6 +66,13 @@ type userDB interface {
 		sharedTx *sql.Tx,
 		id uuid.UUID,
 	) error
+
+	// CheckPhone(ctx context.Context, sharedTx *sql.Tx, phone string) (bool, error)
+	CheckPhone(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+		phone string,
+	) (bool, error)
 }
 
 type companyDB interface {
@@ -333,6 +341,13 @@ type departmentEmployeePositionDB interface {
 	) (bool, error)
 }
 
+type uuidValidation interface {
+	CheckAndReserveUUID(
+		ctx context.Context,
+		sharedTx *sql.Tx,
+	) (uuid.UUID, error)
+}
+
 type PostgresDB struct {
 	User                       userDB
 	Company                    companyDB
@@ -341,6 +356,7 @@ type PostgresDB struct {
 	Department                 departmentDB
 	DepartmentEmployee         departmentEmployeeDB
 	DepartmentEmployeePosition departmentEmployeePositionDB
+	UuidValidation             uuidValidation
 }
 
 func NewPostgresDB() PostgresDB {
@@ -352,6 +368,7 @@ func NewPostgresDB() PostgresDB {
 		Department:                 dbDepartment.NewPostgresDepartment(),
 		DepartmentEmployee:         dbDepemployee.NewPostgresEmployeeDepartment(),
 		DepartmentEmployeePosition: dbDepPosition.NewPostgresDepPosition(),
+		UuidValidation:             dbUuidvalidation.NewDBUuidValidation(),
 	}
 }
 

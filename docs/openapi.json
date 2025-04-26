@@ -1,0 +1,131 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Blog API",
+      "description": "API для управления постами в блоге",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080/api/v1",
+        "description": "Локальный сервер разработки"
+      }
+    ],
+    "paths": {
+      "/posts": {
+        "get": {
+          "summary": "Получить список всех постов",
+          "responses": {
+            "200": {
+              "description": "Успешный запрос",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Post"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Создать новый пост",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostCreate"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Пост создан",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/posts/{id}": {
+        "get": {
+          "summary": "Получить пост по ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Успешный запрос",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Пост не найден"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Post": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "id",
+            "title"
+          ]
+        },
+        "PostCreate": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title"
+          ]
+        }
+      }
+    }
+  }
