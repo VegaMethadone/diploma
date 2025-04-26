@@ -3,11 +3,11 @@ package bucket
 import "github.com/minio/minio-go/v7"
 
 type BucketMINIO struct {
-	Client *minio.Client
+	client *minio.Client
 }
 
 func NewBucketMINIO(client *minio.Client) *BucketMINIO {
 	return &BucketMINIO{
-		Client: client,
+		client: client,
 	}
 }

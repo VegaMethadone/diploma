@@ -17,7 +17,7 @@ func (f *FileMINIO) DeleteFile(
 		return fmt.Errorf("bucket and object names cannot be empty")
 	}
 
-	if err := f.Client.RemoveObject(ctx, bucketName, objectName, opts); err != nil {
+	if err := f.client.RemoveObject(ctx, bucketName, objectName, opts); err != nil {
 		return fmt.Errorf("failed to remove object: %w", err)
 	}
 

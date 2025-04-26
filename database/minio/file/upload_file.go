@@ -26,7 +26,7 @@ func (f *FileMINIO) UploadFile(
 		return fmt.Errorf("file reader cannot be nil")
 	}
 
-	exists, err := f.Client.BucketExists(ctx, bucketName)
+	exists, err := f.client.BucketExists(ctx, bucketName)
 	if err != nil {
 		return fmt.Errorf("failed to check bucket existence: %w", err)
 	}
@@ -34,7 +34,7 @@ func (f *FileMINIO) UploadFile(
 		return fmt.Errorf("bucket %s does not exist", bucketName)
 	}
 
-	_, err = f.Client.PutObject(ctx, bucketName, objectName, file, objectSize, opts)
+	_, err = f.client.PutObject(ctx, bucketName, objectName, file, objectSize, opts)
 	if err != nil {
 		return fmt.Errorf("failed to upload file: %w", err)
 	}

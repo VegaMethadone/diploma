@@ -11,17 +11,17 @@ func (b *BucketMINIO) DeleteForce(
 	ctx context.Context,
 	bucketName string,
 ) error {
-	objectsCh := b.Client.ListObjects(ctx, bucketName, minio.ListObjectsOptions{
+	objectsCh := b.client.ListObjects(ctx, bucketName, minio.ListObjectsOptions{
 		Recursive: true,
 	})
 
-	for err := range b.Client.RemoveObjects(ctx, bucketName, objectsCh, minio.RemoveObjectsOptions{}) {
+	for err := range b.client.RemoveObjects(ctx, bucketName, objectsCh, minio.RemoveObjectsOptions{}) {
 		if err.Err != nil {
 			return fmt.Errorf("failed to remove object %s: %w", err.ObjectName, err.Err)
 		}
 	}
 
-	if err := b.Client.RemoveBucket(ctx, bucketName); err != nil {
+	if err := b.client.RemoveBucket(ctx, bucketName); err != nil {
 		return fmt.Errorf("failed to remove bucket: %w", err)
 	}
 

@@ -12,7 +12,7 @@ func (b *BucketMINIO) CreateBucket(
 	bucketName string,
 	opts minio.MakeBucketOptions,
 ) error {
-	exists, err := b.Client.BucketExists(ctx, bucketName)
+	exists, err := b.client.BucketExists(ctx, bucketName)
 	if err != nil {
 		return fmt.Errorf("failed to check bucket existence: %w", err)
 	}
@@ -21,7 +21,7 @@ func (b *BucketMINIO) CreateBucket(
 		return fmt.Errorf("bucket '%s' already exists", bucketName)
 	}
 
-	err = b.Client.MakeBucket(ctx, bucketName, opts)
+	err = b.client.MakeBucket(ctx, bucketName, opts)
 	if err != nil {
 		return fmt.Errorf("failed to create bucket: %w", err)
 	}

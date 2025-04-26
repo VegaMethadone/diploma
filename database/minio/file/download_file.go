@@ -20,7 +20,7 @@ func (f *FileMINIO) DownloadFile(
 		return nil, fmt.Errorf("object name cannot be empty")
 	}
 
-	obj, err := f.Client.GetObject(ctx, bucketName, objectName, opts)
+	obj, err := f.client.GetObject(ctx, bucketName, objectName, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get object: %w", err)
 	}

@@ -19,7 +19,7 @@ func (f *FileMINIO) FileExists(
 		return false, fmt.Errorf("object name cannot be empty")
 	}
 
-	_, err := f.Client.StatObject(ctx, bucketName, objectName, minio.StatObjectOptions{})
+	_, err := f.client.StatObject(ctx, bucketName, objectName, minio.StatObjectOptions{})
 	if err != nil {
 		if errResp := minio.ToErrorResponse(err); errResp.Code == "NoSuchKey" {
 			return false, nil
