@@ -18,5 +18,5 @@ func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
 	}
-
+	// добавить логику по загрузки  картинки из minio
 }

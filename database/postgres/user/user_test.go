@@ -31,9 +31,9 @@ func setup() error {
 		Login:            "vegaomega",
 		PasswordHash:     "qweqwe123",
 		Email:            "vegaomega@gmail.com",
-		EmailVerified:    false,
+		EmailVerified:    true,
 		Phone:            "+77775553535",
-		PhoneVerified:    false,
+		PhoneVerified:    true,
 		FirstName:        "ivan",
 		LastName:         "ivanovich",
 		Bio:              "NoBio",
@@ -42,7 +42,7 @@ func setup() error {
 		CreatedAt:        time.Now(),
 		UpdatedAt:        time.Now(),
 		LastLoginAt:      time.Now(),
-		IsActive:         false,
+		IsActive:         true,
 		IsStaff:          false,
 	}
 	return nil
@@ -118,13 +118,6 @@ func TestUserCRUD(t *testing.T) {
 		}
 	})
 
-	t.Run("DeleteUser", func(t *testing.T) {
-		err := pu.DeleteUser(ctx, tx, testUser.ID)
-		if err != nil {
-			t.Fatalf("DeleteUser failed: %v", err)
-		}
-	})
-
 	t.Run("CheckPhone", func(t *testing.T) {
 		exists, err := pu.CheckPhone(ctx, tx, "+77775553535")
 		if err != nil {
@@ -133,6 +126,13 @@ func TestUserCRUD(t *testing.T) {
 
 		if !exists {
 			t.Errorf("Expected phone exists = true, got phone exists = false")
+		}
+	})
+
+	t.Run("DeleteUser", func(t *testing.T) {
+		err := pu.DeleteUser(ctx, tx, testUser.ID)
+		if err != nil {
+			t.Fatalf("DeleteUser failed: %v", err)
 		}
 	})
 

@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"labyrinth/config"
+	"labyrinth/database/mongo/folder"
+	"labyrinth/database/mongo/notebook"
+	mongoPerm "labyrinth/database/mongo/permission"
 	"labyrinth/notebook/models/directory"
 	"labyrinth/notebook/models/journal"
 	"labyrinth/notebook/models/permission"
@@ -37,11 +40,11 @@ type notebookMongo interface {
 	) (bool, error)
 
 	// GetNodebookById
-	GetNodebookById(
+	GetNotebookById(
 		ctx context.Context,
 		tx *mongo.Session,
 		notebookId string,
-	) (journal.Notebook, error)
+	) (*journal.Notebook, error)
 
 	// DeleteNotebook
 	DeleteNotebook(
@@ -68,11 +71,11 @@ type folderMongo interface {
 	) error
 
 	// GetFolderByFolderId возвращает папку по её ID
-	GetFolderByFolderId(
-		ctx context.Context,
-		tx *mongo.Session,
-		folderId string,
-	) (*directory.Directory, error)
+	// GetFolderByFolderId(
+	// 	ctx context.Context,
+	// 	tx *mongo.Session,
+	// 	folderId string,
+	// ) (*directory.Directory, error)
 
 	// GetFoldersByParentId возвращает все папки по ID родительской папки
 	GetFoldersByParentId(
@@ -137,13 +140,24 @@ type permissionMongo interface {
 type MongoDB struct {
 	Client     *mongo.Client
 	Database   *mongo.Database
-	Folder     *folderMongo
-	Notebook   *notebookMongo
-	Permission *permissionMongo
+	Folder     folderMongo
+	Notebook   notebookMongo
+	Permission permissionMongo
 }
 
-func NewMongoDB() MongoDB {
-	return MongoDB{}
+func NewMongoDB() (*MongoDB, error) {
+	client, err := NewConnection()
+	if err != nil {
+		return nil, err
+	}
+	db := client.Database("labyrinth")
+	return &MongoDB{
+		Client:     client,
+		Database:   db,
+		Folder:     folder.NewFolderMongo(db, "folder"),
+		Notebook:   notebook.NewNotebookMongo(db, "notebook"),
+		Permission: mongoPerm.NewPermissionMongo(db, "permission"),
+	}, nil
 }
 
 func NewConnection() (*mongo.Client, error) {

@@ -15,13 +15,13 @@ labyrinth/
 │   └── reset          # POST
 │
 ├── ping               # GET
-├── onboarding         # (не указан в коде)
+│
 │
 └── user/
     ├── {user_id}/             # GET
     │   ├── profile           # GET, POST
     │   │
-    │   ├── company/          # GET, POST (опечатка сохранена)
+    │   ├── company/          # GET, POST
     │   │   ├── {company_id}          # GET
     │   │   ├── profile               # GET, POST
     │   │   ├── invite                # GET, POST
@@ -29,8 +29,8 @@ labyrinth/
     │   │   └── employee/             # GET, POST
     │   │       └── {employee_id}     # GET, PUT, DELETE
     │   │
-    │   └── company/                  # (опечатка в другом месте)
-    │       ├── {compnay_id}/         # GET, POST (опечатка)
+    │   └── company/                  # GET
+    │       ├── {company_id}/         # GET, POST
     │       │   ├── department/       # GET, POST
     │       │   │   └── {department_id}  # GET, PUT, DELETE
     │       │   │

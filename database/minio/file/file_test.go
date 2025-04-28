@@ -68,10 +68,11 @@ func TestMain(m *testing.M) {
 }
 
 func TestFileOperations(t *testing.T) {
-	ctx, err := context.WithTimeout(context.Background(), 5*time.Second)
-	if err != nil {
-		t.Errorf("Failed to setup context: %v", err)
-	}
+	// ctx, err := context.WithTimeout(context.Background(), 5*time.Second)
+	// if err != nil {
+	// 	t.Errorf("Failed to setup context: %v", err)
+	// }
+	ctx := context.Background()
 	bucketRepo := bucket.NewBucketMINIO(minioClient)
 	fileRepo := file.NewFileMINIO(minioClient)
 

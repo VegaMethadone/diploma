@@ -2,7 +2,7 @@
 FROM postgres:latest
 
 
-ENV POSTGRES_DB=testDB
+ENV POSTGRES_DB=labyrinth
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=0000
 
