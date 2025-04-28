@@ -31,11 +31,15 @@ labyrinth/
     │   │
     │   └── company/                  # GET
     │       ├── {company_id}/         # GET, POST
-    │       │   ├── department/       # GET, POST
-    │       │   │   └── {department_id}  # GET, PUT, DELETE
-    │       │   │
-    │       │   └── notebook/         # GET, POST
-    │       │       └── {notebook_id} # GET, POST
+    │           ├── department/       # GET, POST
+    │           │   └── {department_id}  # GET, PUT, DELETE
+    │           │             │
+	│           │             └── depemployee/ # GET, POST
+	│		    │                      └──{depemployee_id} # GET, PUT, DELETE
+	│			│
+	│			│
+    │           └── notebook/         # GET, POST
+    │               └── {notebook_id} # GET, POST
     │
     └── тут будет онбординг ?
 
