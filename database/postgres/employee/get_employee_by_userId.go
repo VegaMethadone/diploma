@@ -14,6 +14,7 @@ func (p PostgresEmployee) GetEmployeeByUserId(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	userId uuid.UUID,
+	companyId uuid.UUID,
 ) (*employee.Employee, error) {
 	if sharedTx == nil {
 		return nil, errors.New("start transaction before query")
@@ -32,11 +33,12 @@ func (p PostgresEmployee) GetEmployeeByUserId(
             updated_at
         FROM employee_company
         WHERE user_id = $1
+		and company_id = $2
         LIMIT 1
     `
 
 	var empl employee.Employee
-	err := sharedTx.QueryRowContext(ctx, query, userId).Scan(
+	err := sharedTx.QueryRowContext(ctx, query, userId, companyId).Scan(
 		&empl.ID,
 		&empl.UserID,
 		&empl.CompanyID,

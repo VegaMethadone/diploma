@@ -1,7 +1,6 @@
 package depemployee
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,8 +16,19 @@ type DepartmentEmployee struct {
 	IsActive     bool      `json:"isActive"` // Добавлено из таблицы
 }
 
-func (d *DepartmentEmployee) Print() {
-	fmt.Println("======================")
-	fmt.Printf("ID\t%s\nEmployeeID\t%s\nDepartmentID\t%s\nPositionID\t%s\n", d.ID, d.EmployeeID, d.DepartmentID, d.PositionID)
-	fmt.Println("======================")
+func NewDepartmentEmployee(
+	generatedId,
+	employeeId,
+	departmentId,
+	positionId uuid.UUID,
+) *DepartmentEmployee {
+	return &DepartmentEmployee{
+		ID:           generatedId,
+		EmployeeID:   employeeId,
+		DepartmentID: departmentId,
+		PositionID:   positionId,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+		IsActive:     true,
+	}
 }

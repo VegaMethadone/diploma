@@ -126,7 +126,7 @@ func TestEmployeeCRUD(t *testing.T) {
 	})
 
 	t.Run("GetEmployeeByUserId", func(t *testing.T) {
-		fetchedEmployee, err := pe.GetEmployeeByUserId(ctx, tx, testEmployee.UserID)
+		fetchedEmployee, err := pe.GetEmployeeByUserId(ctx, tx, testEmployee.UserID, testEmployee.CompanyID)
 		if err != nil {
 			t.Fatalf("GetEmployeeByUserId failed: %v\n", err)
 		}

@@ -17,3 +17,22 @@ type Employee struct {
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }
+
+func NewEmployee(
+	generatedId,
+	userId,
+	companyId,
+	positionId uuid.UUID,
+) *Employee {
+	return &Employee{
+		ID:             generatedId,
+		UserID:         userId,
+		CompanyID:      companyId,
+		PositionID:     positionId,
+		IsActive:       true,
+		IsOnline:       false,
+		LastActivityAt: time.Now(),
+		CreatedAt:      time.Now(),
+		UpdatedAt:      time.Now(),
+	}
+}

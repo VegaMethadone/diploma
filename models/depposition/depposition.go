@@ -10,3 +10,17 @@ type DepPosition struct {
 	Level        int       `json: "lvl"`
 	Name         string    `json: "name"`
 }
+
+func NewDepPosition(
+	generatedId,
+	departmentId uuid.UUID,
+	lvl int,
+	name string,
+) *DepPosition {
+	return &DepPosition{
+		Id:           generatedId,
+		DepartmentId: departmentId,
+		Level:        lvl,
+		Name:         name,
+	}
+}

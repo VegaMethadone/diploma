@@ -65,7 +65,7 @@ func (e EmployeeLogic) GetEmployee(userId, companyId uuid.UUID) (*employee.Emplo
 
 	// 6. Получение данных сотрудника
 	ps := postgres.NewPostgresDB()
-	employee, err := ps.Employee.GetEmployeeByUserId(ctx, tx, userId)
+	employee, err := ps.Employee.GetEmployeeByUserId(ctx, tx, userId, companyId)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			logger.NewWarnMessage("Employee not found",

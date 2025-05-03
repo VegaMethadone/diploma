@@ -146,7 +146,8 @@ type employeeDB interface {
 	GetEmployeeByUserId(
 		ctx context.Context,
 		sharedTx *sql.Tx,
-		employeeId uuid.UUID,
+		userId uuid.UUID,
+		companyId uuid.UUID,
 	) (*employee.Employee, error)
 
 	// GetEmployeesByCompanyId возвращает список сотрудников компании.

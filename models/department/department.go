@@ -17,3 +17,23 @@ type Department struct {
 	UpdatedAt   time.Time `json:"updatedAt"` // Добавлено из таблицы
 	IsActive    bool      `json:"isActive"`  // Добавлено из таблицы
 }
+
+func NewDepartment(
+	generatedId,
+	companyId,
+	parentId uuid.UUID,
+	name,
+	description string,
+) *Department {
+	return &Department{
+		ID:          generatedId,
+		CompanyID:   companyId,
+		Name:        name,
+		Description: description,
+		AvatarURL:   "",
+		ParentID:    parentId,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+		IsActive:    true,
+	}
+}
