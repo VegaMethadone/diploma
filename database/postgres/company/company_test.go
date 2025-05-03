@@ -110,11 +110,11 @@ func TestCompanyCRUD(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to get user companies: %v", err)
 		}
-		if len(companies) != 1 {
-			t.Fatalf("Expected 1 company, got %d", len(companies))
+		if len(*companies) != 1 {
+			t.Fatalf("Expected 1 company, got %d", len(*companies))
 		}
-		if companies[0].ID != testCompany.ID {
-			t.Errorf("Expected company ID %v, got %v", testCompany.ID, companies[0].ID)
+		if (*companies)[0].ID != testCompany.ID {
+			t.Errorf("Expected company ID %v, got %v", testCompany.ID, (*companies)[0].ID)
 		}
 	})
 
@@ -156,8 +156,8 @@ func TestCompanyCRUD(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to verify deactivation: %v", err)
 		}
-		if len(companies) > 0 {
-			t.Errorf("Expected 0 companies after deactivation, got %d", len(companies))
+		if len(*companies) > 0 {
+			t.Errorf("Expected 0 companies after deactivation, got %d", len(*companies))
 		}
 	})
 

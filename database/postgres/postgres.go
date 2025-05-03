@@ -103,7 +103,7 @@ type companyDB interface {
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		userID uuid.UUID,
-	) ([]*company.Company, error)
+	) (*[]company.Company, error)
 
 	// UpdateCompany обновляет данные компании
 	UpdateCompany(

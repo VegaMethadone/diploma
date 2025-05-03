@@ -24,3 +24,24 @@ type Company struct {
 	Email       string    `json:"email"`        // Email
 	TaxNumber   string    `json:"tax_number"`   // Добавлено: налоговый номер
 }
+
+func NewCompany(ownerId uuid.UUID, name, description, address, phone, email string) *Company {
+	return &Company{
+		ID:          uuid.New(),
+		OwnerID:     ownerId,
+		Name:        name,
+		Description: description,
+		LogoURL:     "",
+		Industry:    "",
+		Employees:   1,
+		IsVerified:  false,
+		IsActive:    true,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+		FoundedDate: time.Now(),
+		Address:     address,
+		Phone:       phone,
+		Email:       email,
+		TaxNumber:   "",
+	}
+}

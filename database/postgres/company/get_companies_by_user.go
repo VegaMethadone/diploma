@@ -14,7 +14,7 @@ func (r PostgresCompany) GetCompaniesByUser(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	userID uuid.UUID,
-) ([]*company.Company, error) {
+) (*[]company.Company, error) {
 	if sharedTx == nil {
 		return nil, errors.New("start transaction before query")
 	}
@@ -50,7 +50,7 @@ func (r PostgresCompany) GetCompaniesByUser(
 	}
 	defer rows.Close()
 
-	var companies []*company.Company
+	var companies []company.Company
 
 	for rows.Next() {
 		var c company.Company
@@ -78,12 +78,12 @@ func (r PostgresCompany) GetCompaniesByUser(
 			return nil, fmt.Errorf("failed to scan company: %w", err)
 		}
 
-		companies = append(companies, &c)
+		companies = append(companies, c)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows iteration error: %w", err)
 	}
 
-	return companies, nil
+	return &companies, nil
 }

@@ -78,7 +78,9 @@ func (a Auth) Login(mail, password string) (*user.User, error) {
 		return nil, errors.New("invalid credentials")
 	}
 
-	// 7. Аудит успешного входа
+	// 7. Вытаскиваю данные из minio если они были
+
+	// 8. Аудит успешного входа
 	logger.NewInfoMessage("User logged in successfully",
 		zap.String("user_id", fetchedUser.ID.String()),
 		zap.String("email", mail),
