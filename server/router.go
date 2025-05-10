@@ -10,36 +10,34 @@ import (
 
 labyrinth/
 ├── auth/
-│   ├── register       # POST
-│   ├── login          # POST
-│   └── reset          # POST
+│   ├── register # POST
+│   ├── login # POST
+│   └── reset # POST
 │
-├── ping               # GET
+├── ping # GET
 │
 │
 └── user/
-    ├── {user_id}/             # GET
-    │   ├── profile           # GET, POST
+    ├── {user_id}/ # GET, POST, DELETE
+    │   │  └── profile # GET, POST
     │   │
-    │   ├── company/          # GET, POST
-    │   │   ├── {company_id}          # GET
-    │   │   ├── profile               # GET, POST
-    │   │   ├── invite                # GET, POST
-    │   │   │
-    │   │   └── employee/             # GET, POST
-    │   │       └── {employee_id}     # GET, PUT, DELETE
-    │   │
-    │   └── company/                  # GET
-    │       ├── {company_id}/         # GET, POST
-    │           ├── department/       # GET, POST
-    │           │   └── {department_id}  # GET, PUT, DELETE
-    │           │             │
-	│           │             └── depemployee/ # GET, POST
-	│		    │                      └──{depemployee_id} # GET, PUT, DELETE
-	│			│
-	│			│
-    │           └── notebook/         # GET, POST
-    │               └── {notebook_id} # GET, POST
+    │   └── company/ # GET, POST
+    │       └──  {company_id}/ # GET, POST, DELETE
+	│				   ├── profile # GET, POST
+	│				   ├── invite  # GET, POST
+	│				   ├──	employee/  # GET, POST
+	│				   │ 		└── {employee_id}   # GET, POST, DELETE
+	│				   │
+    │                  ├── department/ # GET, POST
+    │                  │   └── {department_id} # GET, POST, DELETE
+	│								 ├── profile # GET, POST
+    │                  │             │
+	│                  │             └── depemployee/ # GET, POST
+	│		           │                      └──{depemployee_id} # GET, POST, PUT, DELETE
+	│			       │
+	│			       │
+    │                  └── notebook/ # GET, POST
+    │                      └── {notebook_id} # GET, POST, DELETE
     │
     └── тут будет онбординг ?
 
