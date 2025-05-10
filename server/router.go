@@ -17,7 +17,7 @@ labyrinth/
 ├── ping # GET
 │
 │
-└── user/
+└── user/ # POST
     ├── {user_id}/ # GET, POST, DELETE
     │   │  └── profile # GET, POST
     │   │

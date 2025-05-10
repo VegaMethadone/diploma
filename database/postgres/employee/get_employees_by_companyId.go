@@ -14,7 +14,7 @@ func (p PostgresEmployee) GetEmployeesByCompanyId(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	companyId uuid.UUID,
-) ([]*employee.Employee, error) {
+) (*[]employee.Employee, error) {
 	if sharedTx == nil {
 		return nil, errors.New("start transaction before query")
 	}
@@ -41,7 +41,7 @@ func (p PostgresEmployee) GetEmployeesByCompanyId(
 	}
 	defer rows.Close()
 
-	var employees []*employee.Employee
+	var employees []employee.Employee
 	for rows.Next() {
 		var empl employee.Employee
 		if err := rows.Scan(
@@ -57,12 +57,12 @@ func (p PostgresEmployee) GetEmployeesByCompanyId(
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan employee: %w", err)
 		}
-		employees = append(employees, &empl)
+		employees = append(employees, empl)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows iteration error: %w", err)
 	}
 
-	return employees, nil
+	return &employees, nil
 }

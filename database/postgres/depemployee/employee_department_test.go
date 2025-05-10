@@ -118,8 +118,8 @@ func TestDepartmentEmployeeCRUD(t *testing.T) {
 			t.Fatalf("GetEmployeesDepartmentByDepartmentId failed: %v\n", err)
 		}
 
-		if len(fetchedEmployees) != 1 {
-			t.Errorf("Expected 1, got %d\n", len(fetchedEmployees))
+		if len(*fetchedEmployees) != 1 {
+			t.Errorf("Expected 1, got %d\n", len(*fetchedEmployees))
 		}
 	})
 

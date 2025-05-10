@@ -155,7 +155,7 @@ type employeeDB interface {
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		companyId uuid.UUID,
-	) ([]*employee.Employee, error)
+	) (*[]employee.Employee, error)
 
 	// DeleteEmployee is_active = false
 	DeleteEmployee(
@@ -288,7 +288,7 @@ type departmentEmployeeDB interface {
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		departmentID uuid.UUID,
-	) ([]*depemployee.DepartmentEmployee, error)
+	) (*[]depemployee.DepartmentEmployee, error)
 
 	// DeleteEmployeeDepartment удаляет связь сотрудника с отделом
 	DeleteEmployeeDepartment(

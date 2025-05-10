@@ -180,23 +180,6 @@ func (d DepartmentLogic) DeleteDepartment(userId, companyId, departmentId uuid.U
 		return errors.New("department doesn't belong to specified company")
 	}
 
-	// // 11. Check if department has child departments
-	// hasChildren, err := ps.Department.HasChildDepartments(ctx, tx, departmentId)
-	// if err != nil {
-	// 	logger.NewErrMessage("Failed to check child departments",
-	// 		zap.Error(err),
-	// 		zap.String("department_id", departmentId.String()),
-	// 	)
-	// 	return fmt.Errorf("failed to check child departments: %w", err)
-	// }
-
-	// if hasChildren {
-	// 	logger.NewWarnMessage("Cannot delete department with child departments",
-	// 		zap.String("department_id", departmentId.String()),
-	// 	)
-	// 	return errors.New("cannot delete department with child departments")
-	// }
-
 	// 12. Delete department
 	err = ps.Department.DeleteDepartment(ctx, tx, departmentId)
 	if err != nil {

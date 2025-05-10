@@ -14,7 +14,7 @@ func (p PostgresEmployeeDepartment) GetEmployeesDepartmentByDepartmentId(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	departmentID uuid.UUID,
-) ([]*depemployee.DepartmentEmployee, error) {
+) (*[]depemployee.DepartmentEmployee, error) {
 	if sharedTx == nil {
 		return nil, errors.New("transaction must be started before query")
 	}
@@ -39,7 +39,7 @@ func (p PostgresEmployeeDepartment) GetEmployeesDepartmentByDepartmentId(
 	}
 	defer rows.Close()
 
-	var employees []*depemployee.DepartmentEmployee
+	var employees []depemployee.DepartmentEmployee
 	for rows.Next() {
 		var de depemployee.DepartmentEmployee
 		if err := rows.Scan(
@@ -53,12 +53,12 @@ func (p PostgresEmployeeDepartment) GetEmployeesDepartmentByDepartmentId(
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan employee department: %w", err)
 		}
-		employees = append(employees, &de)
+		employees = append(employees, de)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows iteration error: %w", err)
 	}
 
-	return employees, nil
+	return &employees, nil
 }
