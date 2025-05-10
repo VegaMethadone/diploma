@@ -1,0 +1,89 @@
+package logic
+
+import (
+	authlogic "labyrinth/logic/authLogic"
+	companylogic "labyrinth/logic/companyLogic"
+	departmentlogic "labyrinth/logic/departmentLogic"
+	depemployeelogic "labyrinth/logic/depemployeeLogic"
+	depemployeeposlogic "labyrinth/logic/depemployeeposLogic"
+	employeelogic "labyrinth/logic/employeeLogic"
+	userlogic "labyrinth/logic/userLogic"
+	"labyrinth/models/company"
+	"labyrinth/models/department"
+	"labyrinth/models/depemployee"
+	"labyrinth/models/depposition"
+	"labyrinth/models/employee"
+	"labyrinth/models/user"
+
+	"github.com/google/uuid"
+)
+
+type authLogic interface {
+	Login(mail, password string) (*user.User, error)
+	Register(mail, hashPassword, phone string) error
+}
+
+type userLogic interface {
+	UpdateUserProfile(userProfile *user.User) error
+	GetUserProfile(userId uuid.UUID) (*user.User, error)
+}
+
+type companyLogic interface {
+	DeleteCompany(companyId uuid.UUID) error
+	GetCompany(userId, companyId uuid.UUID) (*company.Company, error)
+	GetUserCompanies(userId uuid.UUID) (*[]company.Company, error)
+	NewCompany(userId uuid.UUID, name, description string) error
+	UpdateCompany(comp *company.Company, companyId, employeeId uuid.UUID) error
+}
+
+type employeeLogic interface {
+	DeleteEmployee(userId, companyId, employeeId uuid.UUID) error
+	GetAllEmployee(companyId uuid.UUID) (*[]employee.Employee, error)
+	GetEmployee(userId, companyId uuid.UUID) (*employee.Employee, error)
+	NewEmployee(employeeId, userId, companyId, positionId uuid.UUID) error
+	UpdateEmployee(userId, companyId uuid.UUID, updatedEmployee *employee.Employee) error
+}
+
+type departmentLogic interface {
+	DeleteDepartment(userId, companyId, departmentId uuid.UUID) error
+	GetDepartment(userId, companyId, departmentId uuid.UUID) (*department.Department, error)
+	NewDepartment(userId, companyId, parentId uuid.UUID, name, description string) error
+	UpdateDepartment(userId, companyId uuid.UUID, updateDepartment *department.Department) error
+}
+
+type departmentEmployeeLogic interface {
+	DeleteDepartmentEmployee(employeeId, departmentId, depemployeeId uuid.UUID) error
+	GetAllDepEmployees(departmentId uuid.UUID) (*[]depemployee.DepartmentEmployee, error)
+	GetDepartmentEmployee(employeeId, departmentId uuid.UUID) (*depemployee.DepartmentEmployee, error)
+	NewDepemployee(employeeId, departmentId, positionId uuid.UUID) error
+	UpdateDepEmployee(employeeId, departmentId uuid.UUID, updatedDepEmployee *depemployee.DepartmentEmployee) error
+}
+
+type departmentEmployeePosLogic interface {
+	DeleteDepEmployeePos(currentlvl int, employeeId, departmentId, positionId uuid.UUID) error
+	GetAllDepEmployeePos(departmentId uuid.UUID) (*[]depposition.DepPosition, error)
+	NewDepemployeePos(departmentId uuid.UUID, lvl int, name string) error
+	UpdateDepEmployeePos(currentlvl int, employeeId, departmentId uuid.UUID, position *depposition.DepPosition) error
+}
+
+type BusinessLogic struct {
+	Auth                       authLogic
+	User                       userLogic
+	Company                    companyLogic
+	Employee                   employeeLogic
+	Department                 departmentLogic
+	DepartmentEmployee         departmentEmployeeLogic
+	DepartmentEmployeePosition departmentEmployeePosLogic
+}
+
+func NewBusinessLogic() *BusinessLogic {
+	return &BusinessLogic{
+		Auth:                       authlogic.NewAuth(),
+		User:                       userlogic.NewUserlogic(),
+		Company:                    companylogic.NewCompanyLogic(),
+		Employee:                   employeelogic.NewEmployeeLogic(),
+		Department:                 departmentlogic.NewDepartmentLogic(),
+		DepartmentEmployee:         depemployeelogic.NewDepemployeeLogic(),
+		DepartmentEmployeePosition: depemployeeposlogic.NewDepemploeePosLogic(),
+	}
+}

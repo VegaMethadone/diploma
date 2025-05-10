@@ -14,7 +14,7 @@ func (p PostgresDepPosition) GetDepartmentPositionsByDepartmentId(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	departmentID uuid.UUID,
-) ([]*depposition.DepPosition, error) {
+) (*[]depposition.DepPosition, error) {
 	if sharedTx == nil {
 		return nil, errors.New("transaction must be started before query")
 	}
@@ -36,7 +36,7 @@ func (p PostgresDepPosition) GetDepartmentPositionsByDepartmentId(
 	}
 	defer rows.Close()
 
-	var positions []*depposition.DepPosition
+	var positions []depposition.DepPosition
 	for rows.Next() {
 		var position depposition.DepPosition
 		if err := rows.Scan(
@@ -47,12 +47,12 @@ func (p PostgresDepPosition) GetDepartmentPositionsByDepartmentId(
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan department position: %w", err)
 		}
-		positions = append(positions, &position)
+		positions = append(positions, position)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("error after iterating department positions: %w", err)
 	}
 
-	return positions, nil
+	return &positions, nil
 }

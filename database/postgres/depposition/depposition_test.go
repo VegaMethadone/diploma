@@ -114,8 +114,8 @@ func TestDepPositionCRUD(t *testing.T) {
 			t.Fatalf("GetDepartmentPositionsByDepartmentId failed: %v\n", err)
 		}
 
-		if len(fetchedDepPositions) != 1 {
-			t.Errorf("Expected 1, got %d\n", len(fetchedDepPositions))
+		if len(*fetchedDepPositions) != 1 {
+			t.Errorf("Expected 1, got %d\n", len(*fetchedDepPositions))
 		}
 	})
 

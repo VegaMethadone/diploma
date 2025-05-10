@@ -1,46 +1,39 @@
 package logic
 
-import (
-	"fmt"
-	"log"
+// var secretKey = []byte("0987612345574839201")
 
-	"github.com/golang-jwt/jwt/v5"
-)
+// func newToken(settings jwt.MapClaims) string {
+// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, settings)
 
-var secretKey = []byte("0987612345574839201")
+// 	tokenString, err := token.SignedString(secretKey)
+// 	if err != nil {
+// 		log.Println("Failed to create tokenString:", err)
+// 		return ""
+// 	}
 
-func newToken(settings jwt.MapClaims) string {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, settings)
+// 	return tokenString
+// }
 
-	tokenString, err := token.SignedString(secretKey)
-	if err != nil {
-		log.Println("Failed to create tokenString:", err)
-		return ""
-	}
+// func verifyToken(tokenString string) (jwt.MapClaims, error) {
+// 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+// 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+// 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+// 		}
+// 		return secretKey, nil
+// 	})
 
-	return tokenString
-}
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to parse token: %w", err)
+// 	}
 
-func verifyToken(tokenString string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-		return secretKey, nil
-	})
+// 	if !token.Valid {
+// 		return nil, fmt.Errorf("invalid token")
+// 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse token: %w", err)
-	}
+// 	claims, ok := token.Claims.(jwt.MapClaims)
+// 	if !ok {
+// 		return nil, fmt.Errorf("failed to extract claims")
+// 	}
 
-	if !token.Valid {
-		return nil, fmt.Errorf("invalid token")
-	}
-
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return nil, fmt.Errorf("failed to extract claims")
-	}
-
-	return claims, nil
-}
+// 	return claims, nil
+// }

@@ -325,7 +325,7 @@ type departmentEmployeePositionDB interface {
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		departmentID uuid.UUID,
-	) ([]*depposition.DepPosition, error)
+	) (*[]depposition.DepPosition, error)
 
 	// DeleteDepartmentPosition удаляет должность
 	DeleteDepartmentPosition(
