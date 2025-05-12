@@ -3,6 +3,7 @@ package directory
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -53,4 +54,65 @@ type File struct {
 	FileUUID    string             `bson:"uuid_id"`
 	Title       string             `bson:"title"`
 	Description string             `bson:"description"`
+}
+
+func NewDirectory(employeeId, companyId, divisionId, generatedId, parentId uuid.UUID, version string, isPrimary bool, title, description string) Directory {
+	return Directory{
+		ID:        primitive.NewObjectID(),
+		UuidID:    generatedId.String(),
+		ParentId:  parentId.String(),
+		IsPrimary: isPrimary,
+		Version:   version,
+		Metadata:  NewMetadata(employeeId, companyId, divisionId, title, description),
+		Folders:   []Folder{},
+		Files:     []File{},
+	}
+}
+
+func NewMetadata(employeeId, compaydId, divisionId uuid.UUID, title, description string) Metadata {
+	return Metadata{
+		CompanyID:   compaydId.String(),
+		DivisionID:  divisionId.String(),
+		Title:       title,
+		Description: description,
+		Tags:        []string{},
+		Created:     NewTimestamp(time.Now(), employeeId.String()),
+		LastUpdate:  NewTimestamp(time.Now(), employeeId.String()),
+		Links:       NewDocumentLinks("", "", "", []string{}),
+	}
+}
+
+func NewDocumentLinks(read, comment, write string, links []string) DocumentLinks {
+	return DocumentLinks{
+		Read:        read,
+		Comment:     comment,
+		Write:       write,
+		ActiveLinks: links,
+	}
+}
+
+func NewTimestamp(t time.Time, author string) Timestamp {
+	return Timestamp{
+		Date:   t,
+		Time:   t,
+		Author: author,
+	}
+}
+
+func NewFolder(fileUUID uuid.UUID, title, description string) Folder {
+	return Folder{
+		FolderID:    primitive.NewObjectID(),
+		FolderUUID:  fileUUID.String(),
+		Title:       title,
+		Description: description,
+	}
+}
+
+func NewFile(fileUUID uuid.UUID, title, description string) File {
+	return File{
+		FileID:      primitive.NewObjectID(),
+		FileUUID:    fileUUID.String(),
+		Title:       title,
+		Description: description,
+	}
 }

@@ -2,6 +2,9 @@ package server
 
 import (
 	"labyrinth/server/handlers"
+	"labyrinth/server/handlers/auth"
+	"labyrinth/server/handlers/company"
+	"labyrinth/server/handlers/user"
 
 	"github.com/gorilla/mux"
 )
@@ -19,11 +22,11 @@ labyrinth/
 │
 └── user/ # POST
     ├── {user_id}/ # GET, POST, DELETE
-    │   │  └── profile # GET, POST
+    │   │  └── profile # GET, POST, DELETE
     │   │
     │   └── company/ # GET, POST
-    │       └──  {company_id}/ # GET, POST, DELETE
-	│				   ├── profile # GET, POST
+    │       └──  {company_id}/ # GET
+	│				   ├── profile # GET, POST,  DELETE
 	│				   ├── invite  # GET, POST
 	│				   ├──	employee/  # GET, POST
 	│				   │ 		└── {employee_id}   # GET, POST, DELETE
@@ -45,15 +48,23 @@ labyrinth/
 
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
+
+	// проверка сервера на готовность
 	r.HandleFunc("labyrinth/ping", handlers.Ping).Methods("GET")
 
-	// r.HandleFunc("labyrinth/auth/register", handler).Methods("POST")
-	// r.HandleFunc("labyrinth/auth/login", handler).Methods("POST")
+	// авторизация
+	r.HandleFunc("labyrinth/auth/register", auth.RegisterUserHandler).Methods("POST")
+	r.HandleFunc("labyrinth/auth/login", auth.LoginUserHandler).Methods("POST")
 	// r.HandleFunc("labyrinth/auth/reset", handler).Methods("POST")
 
-	// r.HandleFunc("labyrinth/user/{user_id}", handler).Methods("GET")
-	// r.HandleFunc("labyrinth/user/{user_id}/profile", handler).Methods("GET", "POST")
-	// r.HandleFunc("labyrinth/user/{user_id}/compnay", handler).Methods("GET", "POST")
+	// работа с пользователем
+	r.HandleFunc("labyrinth/user/{user_id}/profile", user.GetUserProfileHandler).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/profile", user.UpdateUserProfileHandler).Methods("POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/profile", user.DeleteUserProfileHandler).Methods("DLETE")
+
+	// работа с компанией
+	r.HandleFunc("labyrinth/user/{user_id}/compnay", company.GetAllCompaniesHandler).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/compnay", company.NewCompanyHandler).Methods("POST")
 
 	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}", handler).Methods("GET") где get - вход в комапию
 	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", handler).Methods("GET", "POST")

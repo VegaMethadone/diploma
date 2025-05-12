@@ -70,12 +70,11 @@ type folderMongo interface {
 		updateData *directory.Directory,
 	) error
 
-	// GetFolderByFolderId возвращает папку по её ID
-	// GetFolderByFolderId(
-	// 	ctx context.Context,
-	// 	tx *mongo.Session,
-	// 	folderId string,
-	// ) (*directory.Directory, error)
+	GetFolderByFolderId(
+		ctx context.Context,
+		tx *mongo.Session,
+		folderId string,
+	) (*directory.Directory, error)
 
 	// GetFoldersByParentId возвращает все папки по ID родительской папки
 	GetFoldersByParentId(

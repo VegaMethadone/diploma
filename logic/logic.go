@@ -15,6 +15,7 @@ import (
 	"labyrinth/models/employee"
 	"labyrinth/models/user"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 )
 
@@ -66,7 +67,13 @@ type departmentEmployeePosLogic interface {
 	UpdateDepEmployeePos(currentlvl int, employeeId, departmentId uuid.UUID, position *depposition.DepPosition) error
 }
 
+type jwtLogic interface {
+	NewToken(settings jwt.MapClaims) string
+	VerifyToken(tokenString string) (jwt.MapClaims, error)
+}
+
 type BusinessLogic struct {
+	Jwt                        jwtLogic
 	Auth                       authLogic
 	User                       userLogic
 	Company                    companyLogic
@@ -78,6 +85,7 @@ type BusinessLogic struct {
 
 func NewBusinessLogic() *BusinessLogic {
 	return &BusinessLogic{
+		Jwt:                        NewMyJwt(),
 		Auth:                       authlogic.NewAuth(),
 		User:                       userlogic.NewUserlogic(),
 		Company:                    companylogic.NewCompanyLogic(),
