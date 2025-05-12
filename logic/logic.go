@@ -33,7 +33,7 @@ type companyLogic interface {
 	DeleteCompany(companyId uuid.UUID) error
 	GetCompany(userId, companyId uuid.UUID) (*company.Company, error)
 	GetUserCompanies(userId uuid.UUID) (*[]company.Company, error)
-	NewCompany(userId uuid.UUID, name, description string) error
+	NewCompany(userId uuid.UUID, name, description string) (uuid.UUID, error)
 	UpdateCompany(comp *company.Company, companyId, employeeId uuid.UUID) error
 }
 

@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetFolder(folderId uuid.UUID) (*directory.Directory, error) {
+func (f FolderMongoLogic) GetFolder(folderId uuid.UUID) (*directory.Directory, error) {
 	// 1. Validate input
 	if folderId == uuid.Nil {
 		logger.NewErrMessage("Invalid folder ID",

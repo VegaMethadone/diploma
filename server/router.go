@@ -63,12 +63,17 @@ func NewRouter() *mux.Router {
 	// r.HandleFunc("labyrinth/user/{user_id}/profile", user.DeleteUserProfileHandler).Methods("DLETE")
 
 	// работа с компанией
-	r.HandleFunc("labyrinth/user/{user_id}/compnay", company.GetAllCompaniesHandler).Methods("GET")
-	r.HandleFunc("labyrinth/user/{user_id}/compnay", company.NewCompanyHandler).Methods("POST")
+	r.HandleFunc("labyrinth/user/{user_id}/company", company.NewCompanyHandler).Methods("POST")
+	r.HandleFunc("labyrinth/user/{user_id}/company", company.GetAllCompaniesHandler).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}", company.GetCompanyHandler).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", company.GetCompanyProfileHandler).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", company.UpdateCompanyProfileHandler).Methods("POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", company.DeletCompanyProfileHandler).Methods("DELETE")
+
+	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/invite", handler).Methods("GET", "POST", "DELETE")
 
 	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}", handler).Methods("GET") где get - вход в комапию
 	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/profile", handler).Methods("GET", "POST")
-	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/invite", handler).Methods("GET", "POST")
 
 	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/employee", handler).Methods("GET", "POST")
 	// r.HandleFunc("labyrinth/user/{user_id}/compnay/{company_id}/employee/{employee_id}", handler).Methods("GET", "PUT", "DELETE")

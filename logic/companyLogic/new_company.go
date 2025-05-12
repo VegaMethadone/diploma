@@ -8,6 +8,9 @@ import (
 	"labyrinth/database/postgres"
 	"labyrinth/logger"
 	"labyrinth/models/company"
+	"labyrinth/models/employee"
+	"labyrinth/models/position"
+	notebookLogic "labyrinth/notebook/logic"
 	"strings"
 	"time"
 
@@ -15,15 +18,15 @@ import (
 	"go.uber.org/zap"
 )
 
-func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) error {
+func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) (uuid.UUID, error) {
 	// 1. Валидация входных данных
 	if userId == uuid.Nil {
-		return errors.New("user id cannot be empty")
+		return uuid.Nil, errors.New("user id cannot be empty")
 	}
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" || description == "" {
-		return errors.New("name and description cannot be empty")
+		return uuid.Nil, errors.New("name and description cannot be empty")
 	}
 
 	// 2. Инициализация подключения к БД
@@ -34,7 +37,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.String("operation", "NewCompany"),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("database connection failed: %w", err)
+		return uuid.Nil, fmt.Errorf("database connection failed: %w", err)
 	}
 	defer db.Close()
 
@@ -50,7 +53,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.String("operation", "NewCompany"),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("transaction begin failed: %w", err)
+		return uuid.Nil, fmt.Errorf("transaction begin failed: %w", err)
 	}
 
 	// Обеспечиваем откат транзакции в случае ошибки
@@ -74,14 +77,14 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			logger.NewWarnMessage("User not found",
 				zap.String("user_id", userId.String()),
 			)
-			return fmt.Errorf("user not found: %w", err)
+			return uuid.Nil, fmt.Errorf("user not found: %w", err)
 		}
 
 		logger.NewErrMessage("Failed to get user",
 			zap.Error(err),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("failed to get user: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	// 6. Генерация нового UUID для компании
@@ -91,7 +94,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.Error(err),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("failed to generate company UUID: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to generate company UUID: %w", err)
 	}
 
 	// 7. Создание новой компании
@@ -99,7 +102,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 		userId,
 		name,
 		description,
-		"no address", // временное значение, можно вынести в конфиг
+		"no address",
 		foundUser.Phone,
 		foundUser.Email,
 	)
@@ -113,7 +116,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.String("user_id", userId.String()),
 			zap.String("company_id", newCompanyUUID.String()),
 		)
-		return fmt.Errorf("failed to create company: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to create company: %w", err)
 	}
 
 	// 8. Добавление пользователя в компанию
@@ -124,20 +127,75 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.String("user_id", userId.String()),
 			zap.String("company_id", newCompanyUUID.String()),
 		)
-		return fmt.Errorf("failed to add user to company: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to add user to company: %w", err)
 	}
 
-	// 9. Сохранение данных в MinIO (если требуется)
-	// Пример:
-	/*
-	   if err := c.saveCompanyLogoToMinio(ctx, newCompanyUUID); err != nil {
-	       logger.NewWarnMessage("Failed to save company logo to MinIO",
-	           zap.Error(err),
-	           zap.String("company_id", newCompanyUUID.String()),
-	       )
-	       // Можно продолжить, если это не критическая ошибка
-	   }
-	*/
+	employeeUUID, err := ps.UuidValidation.CheckAndReserveUUID(ctx, tx)
+	if err != nil {
+		logger.NewErrMessage("Failed to generate employee UUID",
+			zap.Error(err),
+			zap.String("user_id", userId.String()),
+			zap.String("company_id", newCompanyUUID.String()),
+		)
+		return uuid.Nil, fmt.Errorf("failed to generate employee UUID: %w", err)
+	}
+
+	positionUUID, err := ps.UuidValidation.CheckAndReserveUUID(ctx, tx)
+	if err != nil {
+		logger.NewErrMessage("Failed to generate position UUID",
+			zap.Error(err),
+			zap.String("user_id", userId.String()),
+			zap.String("company_id", newCompanyUUID.String()),
+		)
+		return uuid.Nil, fmt.Errorf("failed to generate position UUID: %w", err)
+	}
+
+	// Создание позиции владельца
+	newPosition := position.NewPosition(positionUUID, newCompanyUUID, 0, "owner")
+	err = ps.Position.CreatePosition(ctx, tx, &newPosition)
+	if err != nil {
+		logger.NewErrMessage("Failed to create owner position",
+			zap.Error(err),
+			zap.String("user_id", userId.String()),
+			zap.String("company_id", newCompanyUUID.String()),
+			zap.String("position_id", positionUUID.String()),
+		)
+		return uuid.Nil, fmt.Errorf("failed to create owner position: %w", err)
+	}
+
+	// Создание сотрудника (владельца)
+	newEmployee := employee.NewEmployee(employeeUUID, userId, newCompanyUUID, positionUUID)
+	err = ps.Employee.CreateEmployee(ctx, tx, newEmployee)
+	if err != nil {
+		logger.NewErrMessage("Failed to create employee record",
+			zap.Error(err),
+			zap.String("user_id", userId.String()),
+			zap.String("company_id", newCompanyUUID.String()),
+			zap.String("employee_id", employeeUUID.String()),
+		)
+		return uuid.Nil, fmt.Errorf("failed to create employee record: %w", err)
+	}
+
+	// Создание корневой папки компании в файловой системе
+	fileSystem := notebookLogic.NewFileSystem()
+	err = fileSystem.Folder.CreateFolder(
+		employeeUUID,
+		newCompanyUUID,
+		newCompanyUUID,
+		newCompanyUUID,
+		true,
+		name,
+		description,
+	)
+	if err != nil {
+		logger.NewErrMessage("Failed to create company root folder",
+			zap.Error(err),
+			zap.String("user_id", userId.String()),
+			zap.String("company_id", newCompanyUUID.String()),
+			zap.String("employee_id", employeeUUID.String()),
+		)
+		return uuid.Nil, fmt.Errorf("failed to create company root folder: %w", err)
+	}
 
 	// 10. Коммит транзакции
 	if err = tx.Commit(); err != nil {
@@ -146,7 +204,7 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 			zap.String("operation", "NewCompany"),
 			zap.String("company_id", newCompanyUUID.String()),
 		)
-		return fmt.Errorf("transaction commit failed: %w", err)
+		return uuid.Nil, fmt.Errorf("transaction commit failed: %w", err)
 	}
 
 	// 11. Логирование успешного создания
@@ -157,5 +215,5 @@ func (c CompanyLogic) NewCompany(userId uuid.UUID, name, description string) err
 		zap.Time("created_at", time.Now()),
 	)
 
-	return nil
+	return newCompanyUUID, nil
 }

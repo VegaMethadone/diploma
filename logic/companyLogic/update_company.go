@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, employeeId uuid.UUID) error {
+func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, userId uuid.UUID) error {
 	// 1. Проверка валидности входных параметров
 	if comp == nil {
 		logger.NewWarnMessage("Nil company pointer",
@@ -32,7 +32,7 @@ func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, employeeId
 		return errors.New("company ID cannot be empty")
 	}
 
-	if employeeId == uuid.Nil {
+	if userId == uuid.Nil {
 		logger.NewWarnMessage("Empty employee ID",
 			zap.String("operation", "UpdateCompany"),
 			zap.Time("time", time.Now()),
@@ -57,7 +57,7 @@ func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, employeeId
 			zap.Error(err),
 			zap.String("operation", "UpdateCompany"),
 			zap.String("company_id", companyId.String()),
-			zap.String("employee_id", employeeId.String()),
+			zap.String("user_id", userId.String()),
 		)
 		return fmt.Errorf("database connection failed: %w", err)
 	}
@@ -74,7 +74,7 @@ func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, employeeId
 			zap.Error(err),
 			zap.String("operation", "UpdateCompany"),
 			zap.String("company_id", companyId.String()),
-			zap.String("employee_id", employeeId.String()),
+			zap.String("user_id", userId.String()),
 		)
 		return fmt.Errorf("transaction begin failed: %w", err)
 	}
@@ -123,7 +123,7 @@ func (c CompanyLogic) UpdateCompany(comp *company.Company, companyId, employeeId
 	// 9. Логирование успешного обновления
 	logger.NewInfoMessage("Company data updated successfully",
 		zap.String("company_id", companyId.String()),
-		zap.String("updated_by", employeeId.String()),
+		zap.String("updated_by", userId.String()),
 		zap.Time("updated_at", time.Now()),
 	)
 

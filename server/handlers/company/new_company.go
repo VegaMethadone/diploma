@@ -85,7 +85,7 @@ func NewCompanyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 7. Создаем компанию через бизнес-логику
-	err = bl.Company.NewCompany(userID, requestData.Name, requestData.Description)
+	_, err = bl.Company.NewCompany(userID, requestData.Name, requestData.Description)
 	if err != nil {
 		logger.NewErrMessage("Failed to create company",
 			zap.String("operation", "NewCompanyHandler"),

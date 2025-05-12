@@ -22,3 +22,15 @@ type Position struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+func NewPosition(generatedId, companyId uuid.UUID, lvl int, name string) Position {
+	return Position{
+		ID:        generatedId,
+		CompanyID: companyId,
+		Lvl:       lvl,
+		Name:      name,
+		IsActive:  true,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+}
