@@ -52,3 +52,34 @@ type Comment struct {
 	Comment    string    `bson:"comment"`
 	SubComment []Comment `bson:"sub_comments"`
 }
+
+func NewNotebook(employeeId, companyId, divisionId, generatedId, title, description string) Notebook {
+	return Notebook{
+		ID:       primitive.NewObjectID(),
+		UuidID:   generatedId,
+		Version:  "1.0.0",
+		Metadata: NewMethadata(employeeId, companyId, divisionId, title, description),
+		Blocks:   []Block{},
+	}
+}
+
+func NewMethadata(employeeId, companyId, divisionId, title, description string) Metadata {
+	return Metadata{
+		CompanyID:   companyId,
+		DivisionID:  divisionId,
+		Title:       title,
+		Description: description,
+		Tags:        []string{},
+		Created:     NewDateTimeAuthor(employeeId),
+		LastUpdate:  NewDateTimeAuthor(employeeId),
+		Links:       Links{},
+	}
+}
+
+func NewDateTimeAuthor(employeeId string) DateTimeAuthor {
+	return DateTimeAuthor{
+		Date:   time.Now(),
+		Time:   time.Now(),
+		Author: employeeId,
+	}
+}

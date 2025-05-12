@@ -8,6 +8,7 @@ import (
 	"labyrinth/database/postgres"
 	"labyrinth/logger"
 	"labyrinth/notebook/models/directory"
+	"labyrinth/notebook/models/permission"
 	"strings"
 	"time"
 
@@ -110,6 +111,17 @@ func (f FolderMongoLogic) CreateFolder(employeeId, companyId, divisionId, parent
 			zap.String("folder_id", generatedId.String()),
 		)
 		return fmt.Errorf("folder creation failed: %w", err)
+	}
+
+	newPermission := permission.NewPermission(employeeId.String(), generatedId.String(), generatedId.String(), "folder", newFolder.ID)
+	err = md.Permission.CreatePermission(ctx, &session, &newPermission)
+	if err != nil {
+		logger.NewErrMessage("Permission creation failed",
+			zap.Error(err),
+			zap.String("operation", "CreateFolder"),
+			zap.String("folder_id", generatedId.String()),
+		)
+		return fmt.Errorf("permission creation failed: %w", err)
 	}
 
 	// 10. Commit transaction if everything succeeded

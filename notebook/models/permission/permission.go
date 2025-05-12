@@ -25,3 +25,27 @@ type PermissionRules struct {
 	ReadOnly      []string `bson:"read_only"`      // Список ID пользователей с доступом только для чтения
 	AccessLevel   string   `bson:"access_level"`   // Общий уровень доступа: "public", "private", "restricted"
 }
+
+func NewPermission(employeeId, generatedId, generatedResourceUuid, resourceType string, resourceId primitive.ObjectID) Permission {
+	return Permission{
+		ID:           primitive.NewObjectID(),
+		UuidId:       generatedId,
+		ResourceType: resourceType,
+		ResourceID:   resourceId,
+		ResourceUuid: generatedId,
+		Rules:        NewPermissionRules(employeeId),
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+		CreatedBy:    employeeId,
+		Version:      "1.0.0",
+	}
+}
+
+func NewPermissionRules(employeeId string) PermissionRules {
+	return PermissionRules{
+		[]string{employeeId},
+		[]string{},
+		[]string{},
+		"",
+	}
+}

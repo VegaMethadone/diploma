@@ -79,10 +79,17 @@ func cleanDir(ctx context.Context, session *mongo.Session, md *m.MongoDB, dirId 
 		if err := md.Notebook.DeleteNotebook(ctx, session, file.FileUUID); err != nil {
 			return fmt.Errorf("failed to delete notebook %s: %w", file.FileUUID, err)
 		}
+		if err := md.Permission.DeletePermission(ctx, session, file.FileUUID); err != nil {
+			return fmt.Errorf("failed to delete notebook permission %s: %w", file.FileUUID, err)
+		}
 	}
 
 	if err := md.Folder.DeleteFolder(ctx, session, dirId); err != nil {
 		return fmt.Errorf("failed to delete directory %s: %w", dirId, err)
+	}
+
+	if err := md.Permission.DeletePermission(ctx, session, dir.UuidID); err != nil {
+		return fmt.Errorf("failed to delete directory permission %s: %w", dirId, err)
 	}
 
 	return nil
