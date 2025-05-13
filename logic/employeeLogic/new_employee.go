@@ -117,24 +117,24 @@ func (e EmployeeLogic) NewEmployee(employeeId, userId, companyId, positionId uui
 		return errors.New("position doesn't belong to specified company")
 	}
 
-	// 6. Check if employee already exists
-	exists, err := ps.Employee.ExistsEmployee(ctx, tx, employeeId)
-	if err != nil {
-		logger.NewErrMessage("Failed to check employee existence",
-			zap.Error(err),
-			zap.String("employee_id", employeeId.String()),
-			zap.String("company_id", companyId.String()),
-		)
-		return fmt.Errorf("failed to check employee existence: %w", err)
-	}
+	// // 6. Check if employee already exists
+	// exists, err := ps.Employee.ExistsEmployee(ctx, tx, employeeId)
+	// if err != nil {
+	// 	logger.NewErrMessage("Failed to check employee existence",
+	// 		zap.Error(err),
+	// 		zap.String("employee_id", employeeId.String()),
+	// 		zap.String("company_id", companyId.String()),
+	// 	)
+	// 	return fmt.Errorf("failed to check employee existence: %w", err)
+	// }
 
-	if exists {
-		logger.NewWarnMessage("Employee already exists",
-			zap.String("employee_id", employeeId.String()),
-			zap.String("company_id", companyId.String()),
-		)
-		return errors.New("employee already exists in this company")
-	}
+	// if exists {
+	// 	logger.NewWarnMessage("Employee already exists",
+	// 		zap.String("employee_id", employeeId.String()),
+	// 		zap.String("company_id", companyId.String()),
+	// 	)
+	// 	return errors.New("employee already exists in this company")
+	// }
 
 	// 7. Generate new UUID for employee
 	generatedId, err := ps.UuidValidation.CheckAndReserveUUID(ctx, tx)
