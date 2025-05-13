@@ -19,14 +19,14 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 	departmentId uuid.UUID,
 	lvl int,
 	name string,
-) error {
+) (uuid.UUID, error) {
 	// 1. Validate input parameters
 	if departmentId == uuid.Nil {
 		logger.NewWarnMessage("Empty department ID provided",
 			zap.String("operation", "NewDepemployeePos"),
 			zap.Time("time", time.Now()),
 		)
-		return errors.New("department ID cannot be empty")
+		return uuid.Nil, errors.New("department ID cannot be empty")
 	}
 
 	name = strings.TrimSpace(name)
@@ -34,7 +34,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 		logger.NewWarnMessage("Empty position name provided",
 			zap.String("operation", "NewDepemployeePos"),
 		)
-		return errors.New("position name cannot be empty")
+		return uuid.Nil, errors.New("position name cannot be empty")
 	}
 
 	if lvl <= 0 {
@@ -42,7 +42,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 			zap.String("operation", "NewDepemployeePos"),
 			zap.Int("level", lvl),
 		)
-		return errors.New("position level must be positive")
+		return uuid.Nil, errors.New("position level must be positive")
 	}
 
 	// 2. Initialize database connection
@@ -53,7 +53,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 			zap.String("operation", "NewDepemployeePos"),
 			zap.String("department_id", departmentId.String()),
 		)
-		return fmt.Errorf("database connection failed: %w", err)
+		return uuid.Nil, fmt.Errorf("database connection failed: %w", err)
 	}
 	defer db.Close()
 
@@ -69,7 +69,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 			zap.String("operation", "NewDepemployeePos"),
 			zap.String("department_id", departmentId.String()),
 		)
-		return fmt.Errorf("transaction begin failed: %w", err)
+		return uuid.Nil, fmt.Errorf("transaction begin failed: %w", err)
 	}
 
 	// 5. Ensure proper transaction handling
@@ -100,7 +100,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 			zap.String("operation", "NewDepemployeePos"),
 			zap.String("department_id", departmentId.String()),
 		)
-		return fmt.Errorf("failed to generate UUID: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to generate UUID: %w", err)
 	}
 
 	// 7. Create new department position
@@ -117,7 +117,7 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 			zap.String("position_name", name),
 			zap.Int("position_level", lvl),
 		)
-		return fmt.Errorf("failed to create department position: %w", err)
+		return uuid.Nil, fmt.Errorf("failed to create department position: %w", err)
 	}
 
 	logger.NewInfoMessage("Successfully created new department position",
@@ -128,5 +128,5 @@ func (p DepemploeePosLogic) NewDepemployeePos(
 		zap.Int("position_level", lvl),
 	)
 
-	return nil
+	return generatedId, nil
 }

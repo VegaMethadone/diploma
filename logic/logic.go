@@ -48,7 +48,7 @@ type employeeLogic interface {
 type departmentLogic interface {
 	DeleteDepartment(userId, companyId, departmentId uuid.UUID) error
 	GetDepartment(userId, companyId, departmentId uuid.UUID) (*department.Department, error)
-	NewDepartment(userId, companyId, parentId uuid.UUID, name, description string) error
+	NewDepartment(userId, companyId, parentId uuid.UUID, name, description string) (uuid.UUID, uuid.UUID, uuid.UUID, error)
 	UpdateDepartment(userId, companyId uuid.UUID, updateDepartment *department.Department) error
 }
 
@@ -63,7 +63,7 @@ type departmentEmployeeLogic interface {
 type departmentEmployeePosLogic interface {
 	DeleteDepEmployeePos(currentlvl int, employeeId, departmentId, positionId uuid.UUID) error
 	GetAllDepEmployeePos(departmentId uuid.UUID) (*[]depposition.DepPosition, error)
-	NewDepemployeePos(departmentId uuid.UUID, lvl int, name string) error
+	NewDepemployeePos(departmentId uuid.UUID, lvl int, name string) (uuid.UUID, error)
 	UpdateDepEmployeePos(currentlvl int, employeeId, departmentId uuid.UUID, position *depposition.DepPosition) error
 }
 

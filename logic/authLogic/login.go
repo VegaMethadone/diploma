@@ -69,7 +69,6 @@ func (a Auth) Login(mail, password string) (*user.User, error) {
 		return nil, fmt.Errorf("failed to fetch user: %w", err)
 	}
 
-	// 6. Проверка пароля
 	if err := bcrypt.CompareHashAndPassword([]byte(fetchedUser.PasswordHash), []byte(password)); err != nil {
 		logger.NewWarnMessage("Invalid password",
 			zap.String("email", mail),
@@ -77,8 +76,6 @@ func (a Auth) Login(mail, password string) (*user.User, error) {
 		)
 		return nil, errors.New("invalid credentials")
 	}
-
-	// 7. Вытаскиваю данные из minio если они были
 
 	// 8. Аудит успешного входа
 	logger.NewInfoMessage("User logged in successfully",

@@ -1,0 +1,4 @@
+{"level":"INFO","ts":"2025-05-13T23:50:20.458+0300","caller":"logger/logger.go:54","msg":"New user registered","email":"user_test1@gmail.com","phone":"+75555553566","registered_at":"2025-05-13T23:50:20.458+0300"}
+{"level":"INFO","ts":"2025-05-13T23:50:20.519+0300","caller":"logger/logger.go:54","msg":"User logged in successfully","user_id":"60f6b8aa-7c14-4e3e-acd8-e413a9f08e0a","email":"user_test1@gmail.com","login_time":"2025-05-13T23:50:20.519+0300"}
+{"level":"INFO","ts":"2025-05-13T23:50:20.531+0300","caller":"logger/logger.go:54","msg":"User profile updated successfully","user_id":"60f6b8aa-7c14-4e3e-acd8-e413a9f08e0a","email":"user_test1@gmail.com","update_time":"2025-05-13T23:50:20.531+0300"}
+{"level":"INFO","ts":"2025-05-13T23:50:20.542+0300","caller":"logger/logger.go:54","msg":"User profile got successfully","user_id":"60f6b8aa-7c14-4e3e-acd8-e413a9f08e0a","login_time":"2025-05-13T23:50:20.542+0300"}

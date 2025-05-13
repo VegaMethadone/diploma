@@ -43,7 +43,7 @@ func reserveUUID(ctx context.Context, sharedTx *sql.Tx, id uuid.UUID) error {
 func (u DBUuidValidation) CheckAndReserveUUID(ctx context.Context, sharedTx *sql.Tx) (uuid.UUID, error) {
 	var exists bool = true
 	var newUUID = uuid.Nil
-	for !exists {
+	for exists {
 		generatedUUID := uuid.New()
 		ok, err := checkUUID(ctx, sharedTx, generatedUUID)
 		if err != nil {

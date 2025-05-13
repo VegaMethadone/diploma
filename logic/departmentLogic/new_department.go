@@ -23,14 +23,14 @@ func (d DepartmentLogic) NewDepartment(
 	parentId uuid.UUID,
 	name,
 	description string,
-) error {
+) (uuid.UUID, uuid.UUID, uuid.UUID, error) {
 	// 1. Input validation
 	if userId == uuid.Nil {
 		logger.NewWarnMessage("Empty user ID provided",
 			zap.String("operation", "NewDepartment"),
 			zap.Time("time", time.Now()),
 		)
-		return errors.New("user ID cannot be empty")
+		return uuid.Nil, uuid.Nil, uuid.Nil, errors.New("user ID cannot be empty")
 	}
 
 	if companyId == uuid.Nil {
@@ -38,7 +38,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("operation", "NewDepartment"),
 			zap.Time("time", time.Now()),
 		)
-		return errors.New("company ID cannot be empty")
+		return uuid.Nil, uuid.Nil, uuid.Nil, errors.New("company ID cannot be empty")
 	}
 
 	if parentId == uuid.Nil {
@@ -46,7 +46,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("operation", "NewDepartment"),
 			zap.Time("time", time.Now()),
 		)
-		return errors.New("parent department ID cannot be empty")
+		return uuid.Nil, uuid.Nil, uuid.Nil, errors.New("parent department ID cannot be empty")
 	}
 
 	checkName := strings.TrimSpace(name)
@@ -56,7 +56,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("operation", "NewDepartment"),
 			zap.Time("time", time.Now()),
 		)
-		return errors.New("department name and description cannot be empty")
+		return uuid.Nil, uuid.Nil, uuid.Nil, errors.New("department name and description cannot be empty")
 	}
 
 	// 2. Initialize database connection
@@ -68,7 +68,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("user_id", userId.String()),
 			zap.String("company_id", companyId.String()),
 		)
-		return fmt.Errorf("database connection failed: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("database connection failed: %w", err)
 	}
 	defer db.Close()
 
@@ -84,7 +84,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("operation", "NewDepartment"),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("transaction begin failed: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("transaction begin failed: %w", err)
 	}
 
 	// Ensure transaction is rolled back on error
@@ -109,14 +109,14 @@ func (d DepartmentLogic) NewDepartment(
 				zap.String("user_id", userId.String()),
 				zap.String("company_id", companyId.String()),
 			)
-			return fmt.Errorf("employee not found in company: %w", err)
+			return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("employee not found in company: %w", err)
 		}
 
 		logger.NewErrMessage("Failed to fetch employee",
 			zap.Error(err),
 			zap.String("user_id", userId.String()),
 		)
-		return fmt.Errorf("failed to fetch employee: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to fetch employee: %w", err)
 	}
 
 	// 6. Generate UUIDs for new entities
@@ -126,7 +126,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.Error(err),
 			zap.String("operation", "NewDepartment"),
 		)
-		return fmt.Errorf("failed to generate department UUID: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to generate department UUID: %w", err)
 	}
 
 	generatedDepEmpId, err := ps.UuidValidation.CheckAndReserveUUID(ctx, tx)
@@ -135,7 +135,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.Error(err),
 			zap.String("operation", "NewDepartment"),
 		)
-		return fmt.Errorf("failed to generate department employee UUID: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to generate department employee UUID: %w", err)
 	}
 
 	generatedDepPosId, err := ps.UuidValidation.CheckAndReserveUUID(ctx, tx)
@@ -144,7 +144,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.Error(err),
 			zap.String("operation", "NewDepartment"),
 		)
-		return fmt.Errorf("failed to generate department position UUID: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to generate department position UUID: %w", err)
 	}
 
 	// 7. Create new department and related entities
@@ -159,7 +159,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.Error(err),
 			zap.String("department_id", generatedDepId.String()),
 		)
-		return fmt.Errorf("failed to create department: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to create department: %w", err)
 	}
 
 	// 9. Create department employee relationship
@@ -170,7 +170,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("department_id", generatedDepId.String()),
 			zap.String("employee_id", fetchedEmployee.ID.String()),
 		)
-		return fmt.Errorf("failed to create department employee: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to create department employee: %w", err)
 	}
 
 	// 10. Create department position
@@ -181,7 +181,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("department_id", generatedDepId.String()),
 			zap.String("position_id", generatedDepPosId.String()),
 		)
-		return fmt.Errorf("failed to create department position: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("failed to create department position: %w", err)
 	}
 
 	// 11. Commit transaction
@@ -191,7 +191,7 @@ func (d DepartmentLogic) NewDepartment(
 			zap.String("operation", "NewDepartment"),
 			zap.String("department_id", generatedDepId.String()),
 		)
-		return fmt.Errorf("transaction commit failed: %w", err)
+		return uuid.Nil, uuid.Nil, uuid.Nil, fmt.Errorf("transaction commit failed: %w", err)
 	}
 
 	// 12. Log successful creation
@@ -202,5 +202,5 @@ func (d DepartmentLogic) NewDepartment(
 		zap.Time("created_at", time.Now()),
 	)
 
-	return nil
+	return generatedDepId, generatedDepEmpId, generatedDepPosId, nil
 }

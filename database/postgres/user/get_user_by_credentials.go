@@ -26,12 +26,23 @@ func (p PostgresUser) GetUserByCredentials(
             created_at, updated_at, last_login_at,
             is_active, is_staff
         FROM users
-        WHERE login = $1 and password_hash = $2
+        WHERE login = $1
         LIMIT 1
     `
+	// query := `
+	//     SELECT
+	//         id, login, password_hash, email, email_verified,
+	//         phone, phone_verified, first_name, last_name,
+	//         bio, telegram_username, avatar_url,
+	//         created_at, updated_at, last_login_at,
+	//         is_active, is_staff
+	//     FROM users
+	//     WHERE login = $1 and password_hash = $2
+	//     LIMIT 1
+	// `
 
 	var u user.User
-	err := sharedTx.QueryRow(query, login, password).Scan(
+	err := sharedTx.QueryRow(query, login).Scan(
 		&u.ID,
 		&u.Login,
 		&u.PasswordHash,
