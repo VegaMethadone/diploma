@@ -199,7 +199,7 @@ type positionDB interface {
 		ctx context.Context,
 		sharedTx *sql.Tx,
 		companyId uuid.UUID,
-	) ([]*position.Position, error)
+	) (*[]position.Position, error)
 
 	// UpdatePosition обновляет данные должности
 	UpdatePosition(

@@ -96,7 +96,7 @@ func TestPositionCRUD(t *testing.T) {
 			t.Fatalf("GetPositionsByCompanyId failed: %v", err)
 		}
 
-		for _, value := range fetchedPositions {
+		for _, value := range *fetchedPositions {
 			if value.CompanyID != testPosition.CompanyID {
 				t.Errorf("Expected companyId %q, got %q", testPosition.CompanyID, value.CompanyID)
 			}

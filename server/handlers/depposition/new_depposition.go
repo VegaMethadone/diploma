@@ -106,7 +106,7 @@ func NewDepPositionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 8. Создание новой позиции
-	err = bl.DepartmentEmployeePosition.NewDepemployeePos(departmentId, requestData.Lvl, requestData.Name)
+	_, err = bl.DepartmentEmployeePosition.NewDepemployeePos(departmentId, requestData.Lvl, requestData.Name)
 	if err != nil {
 		logger.NewErrMessage("Failed to create department position",
 			zap.String("operation", "NewDepPositionHandler"),

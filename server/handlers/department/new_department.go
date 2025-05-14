@@ -112,7 +112,7 @@ func NewDepartmentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 8. Создание департамента
-	if err := bl.Department.NewDepartment(userID, companyId, requestData.ParentId, requestData.Name, requestData.Description); err != nil {
+	if _, _, _, err := bl.Department.NewDepartment(userID, companyId, requestData.ParentId, requestData.Name, requestData.Description); err != nil {
 		logger.NewErrMessage("Failed to create department",
 			zap.String("operation", "NewDepartmentHandler"),
 			zap.String("user_id", userID.String()),

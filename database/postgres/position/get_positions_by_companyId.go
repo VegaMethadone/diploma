@@ -14,7 +14,7 @@ func (p PostgresPosition) GetPositionsByCompanyId(
 	ctx context.Context,
 	sharedTx *sql.Tx,
 	companyId uuid.UUID,
-) ([]*position.Position, error) {
+) (*[]position.Position, error) {
 	if sharedTx == nil {
 		return nil, errors.New("start transaction before query")
 	}
@@ -39,7 +39,7 @@ func (p PostgresPosition) GetPositionsByCompanyId(
 	}
 	defer rows.Close()
 
-	var positions []*position.Position
+	var positions []position.Position
 	for rows.Next() {
 		var pos position.Position
 		if err := rows.Scan(
@@ -53,12 +53,12 @@ func (p PostgresPosition) GetPositionsByCompanyId(
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan position: %w", err)
 		}
-		positions = append(positions, &pos)
+		positions = append(positions, pos)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows iteration error: %w", err)
 	}
 
-	return positions, nil
+	return &positions, nil
 }
