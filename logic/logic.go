@@ -7,12 +7,14 @@ import (
 	depemployeelogic "labyrinth/logic/depemployeeLogic"
 	depemployeeposlogic "labyrinth/logic/depemployeeposLogic"
 	employeelogic "labyrinth/logic/employeeLogic"
+	positionlogic "labyrinth/logic/positionLogic"
 	userlogic "labyrinth/logic/userLogic"
 	"labyrinth/models/company"
 	"labyrinth/models/department"
 	"labyrinth/models/depemployee"
 	"labyrinth/models/depposition"
 	"labyrinth/models/employee"
+	"labyrinth/models/position"
 	"labyrinth/models/user"
 
 	"github.com/golang-jwt/jwt"
@@ -43,6 +45,12 @@ type employeeLogic interface {
 	GetEmployee(userId, companyId uuid.UUID) (*employee.Employee, error)
 	NewEmployee(employeeId, userId, companyId, positionId uuid.UUID) error
 	UpdateEmployee(userId, companyId uuid.UUID, updatedEmployee *employee.Employee) error
+}
+
+type positionLogic interface {
+	GetAllPositions(userId, companyId uuid.UUID) (*[]position.Position, error)
+	NewPosition(userId, companyId uuid.UUID, lvl int, name string) (uuid.UUID, error)
+	UpdatePosition(userId, companyId uuid.UUID, updatePosition *position.Position) error
 }
 
 type departmentLogic interface {
@@ -77,6 +85,7 @@ type BusinessLogic struct {
 	Auth                       authLogic
 	User                       userLogic
 	Company                    companyLogic
+	Position                   positionLogic
 	Employee                   employeeLogic
 	Department                 departmentLogic
 	DepartmentEmployee         departmentEmployeeLogic
@@ -89,6 +98,7 @@ func NewBusinessLogic() *BusinessLogic {
 		Auth:                       authlogic.NewAuth(),
 		User:                       userlogic.NewUserlogic(),
 		Company:                    companylogic.NewCompanyLogic(),
+		Position:                   positionlogic.NewPositionLogic(),
 		Employee:                   employeelogic.NewEmployeeLogic(),
 		Department:                 departmentlogic.NewDepartmentLogic(),
 		DepartmentEmployee:         depemployeelogic.NewDepemployeeLogic(),
