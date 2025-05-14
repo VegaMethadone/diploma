@@ -7,6 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type DepartmentHandlers struct{}
+
+func NewDepartmentHandlers() DepartmentHandlers { return DepartmentHandlers{} }
+
 var bl *logic.BusinessLogic = logic.NewBusinessLogic()
 var fsl *notebookLogic.FileSystem = notebookLogic.NewFileSystem()
 

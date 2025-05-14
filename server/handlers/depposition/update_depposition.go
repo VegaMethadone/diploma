@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func UpdateDepPositionHandler(w http.ResponseWriter, r *http.Request) {
+func (d DepPositionHandlers) UpdateDepPositionHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Authentication check

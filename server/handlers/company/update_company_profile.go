@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func UpdateCompanyProfileHandler(w http.ResponseWriter, r *http.Request) {
+func (c CompanyHandlers) UpdateCompanyProfileHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя

@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetAllDepPositionHandler(w http.ResponseWriter, r *http.Request) {
+func (d DepPositionHandlers) GetAllDepPositionHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя

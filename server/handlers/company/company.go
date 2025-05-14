@@ -12,6 +12,10 @@ import (
 var bl *logic.BusinessLogic = logic.NewBusinessLogic()
 var fsl *notebookLogic.FileSystem = notebookLogic.NewFileSystem()
 
+type CompanyHandlers struct{}
+
+func NewCompanyHandlers() CompanyHandlers { return CompanyHandlers{} }
+
 type companyRegister struct {
 	Name        string `json: "name"`
 	Description string `json: "description"`

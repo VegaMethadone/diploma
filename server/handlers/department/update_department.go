@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func UpdateDepartmentHandler(w http.ResponseWriter, r *http.Request) {
+func (d DepartmentHandlers) UpdateDepartmentHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя

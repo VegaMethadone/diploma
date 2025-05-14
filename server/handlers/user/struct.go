@@ -10,6 +10,10 @@ import (
 
 var bl logic.BusinessLogic = *logic.NewBusinessLogic()
 
+type UserHandlers struct{}
+
+func NewUserHandlers() UserHandlers { return UserHandlers{} }
+
 type userData struct {
 	Login            string    `json:"login"`             // Уникальный логин
 	PasswordHash     string    `json:"password"`          // Хеш пароля // нельзя передавать хеш в json

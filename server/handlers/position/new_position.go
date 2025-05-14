@@ -1,4 +1,4 @@
-package depposition
+package position
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *http.Request) {
+func (p PositionHandlers) NewPositionHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя
@@ -49,8 +49,8 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	// 4. Парсинг company_id и department_id из пути
-	_, err = uuid.Parse(vars["company_id"])
+	// 4. Парсинг company_id из пути
+	companyId, err := uuid.Parse(vars["company_id"])
 	if err != nil {
 		logger.NewWarnMessage("Invalid company ID format",
 			zap.String("operation", "NewDepPositionHandler"),
@@ -61,23 +61,12 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	departmentId, err := uuid.Parse(vars["department_id"])
-	if err != nil {
-		logger.NewWarnMessage("Invalid department ID format",
-			zap.String("operation", "NewDepPositionHandler"),
-			zap.String("variable", "department_id"),
-			zap.Error(err),
-		)
-		http.Error(w, "Invalid department ID format", http.StatusBadRequest)
-		return
-	}
-
-	// 6. Парсинг тела запроса
-	var requestData deppositionData
+	// 5. Парсинг тела запроса
+	var requestData positionData
 	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
 		logger.NewWarnMessage("Failed to decode request body",
-			zap.String("operation", "NewDepPositionHandler"),
-			zap.String("department_id", departmentId.String()),
+			zap.String("operation", "NewPositionHandler"),
+			zap.String("company_id", companyId.String()),
 			zap.Error(err),
 		)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -85,11 +74,11 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 	}
 	defer r.Body.Close()
 
-	// 7. Валидация данных
+	// 6. Валидация данных
 	if strings.TrimSpace(requestData.Name) == "" {
 		logger.NewWarnMessage("Empty position name",
-			zap.String("operation", "NewDepPositionHandler"),
-			zap.String("department_id", departmentId.String()),
+			zap.String("operation", "NewPositionHandler"),
+			zap.String("company_id", companyId.String()),
 		)
 		http.Error(w, "Position name cannot be empty", http.StatusBadRequest)
 		return
@@ -97,20 +86,20 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 
 	if requestData.Lvl < 0 {
 		logger.NewWarnMessage("Invalid position level",
-			zap.String("operation", "NewDepPositionHandler"),
-			zap.String("department_id", departmentId.String()),
+			zap.String("operation", "NewPositionHandler"),
+			zap.String("company_id", companyId.String()),
 			zap.Int("level", requestData.Lvl),
 		)
 		http.Error(w, "Position level must be positive", http.StatusBadRequest)
 		return
 	}
 
-	// 8. Создание новой позиции
-	_, err = bl.DepartmentEmployeePosition.NewDepemployeePos(departmentId, requestData.Lvl, requestData.Name)
+	// 7. Создание новой позиции
+	positionId, err := bl.Position.NewPosition(userID, companyId, requestData.Lvl, requestData.Name)
 	if err != nil {
-		logger.NewErrMessage("Failed to create department position",
-			zap.String("operation", "NewDepPositionHandler"),
-			zap.String("department_id", departmentId.String()),
+		logger.NewErrMessage("Failed to create position",
+			zap.String("operation", "NewPositionHandler"),
+			zap.String("company_id", companyId.String()),
 			zap.String("position_name", requestData.Name),
 			zap.Error(err),
 		)
@@ -118,29 +107,31 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	// 9. Формирование ответа
+	// 8. Формирование ответа
 	response := map[string]interface{}{
-		"status":        "success",
-		"message":       "Department position created successfully",
-		"name":          requestData.Name,
-		"level":         requestData.Lvl,
-		"department_id": departmentId.String(),
+		"status":      "success",
+		"message":     "Position created successfully",
+		"name":        requestData.Name,
+		"level":       requestData.Lvl,
+		"company_id":  companyId.String(),
+		"position_id": positionId.String(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		logger.NewErrMessage("Failed to encode response",
-			zap.String("operation", "NewDepPositionHandler"),
+			zap.String("operation", "NewPositionHandler"),
 			zap.Error(err),
 		)
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
 		return
 	}
 
-	logger.NewInfoMessage("Department position created successfully",
-		zap.String("operation", "NewDepPositionHandler"),
+	logger.NewInfoMessage("Position created successfully",
+		zap.String("operation", "NewPositionHandler"),
 		zap.String("user_id", userID.String()),
-		zap.String("department_id", departmentId.String()),
+		zap.String("company_id", companyId.String()),
+		zap.String("position_id", positionId.String()),
 		zap.String("position_name", requestData.Name),
 		zap.Int("position_level", requestData.Lvl),
 	)

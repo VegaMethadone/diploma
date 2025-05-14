@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetDepartmentHandler(w http.ResponseWriter, r *http.Request) {
+func (d DepartmentHandlers) GetDepartmentHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	userID, ok := ctx.Value("id").(uuid.UUID)

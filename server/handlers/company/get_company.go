@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetCompanyHandler(w http.ResponseWriter, r *http.Request) {
+func (c CompanyHandlers) GetCompanyHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя

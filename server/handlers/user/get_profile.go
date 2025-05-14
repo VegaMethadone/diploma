@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
+func (u UserHandlers) GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Получаем контекст и извлекаем userID
 	ctx := r.Context()
 

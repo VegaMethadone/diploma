@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func NewCompanyHandler(w http.ResponseWriter, r *http.Request) {
+func (c CompanyHandlers) NewCompanyHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Получаем и проверяем userID из контекста
 	ctx := r.Context()
 	userID, ok := ctx.Value("id").(uuid.UUID)

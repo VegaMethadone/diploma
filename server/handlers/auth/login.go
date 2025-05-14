@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func LoginUserHandler(w http.ResponseWriter, r *http.Request) {
+func (a AuthHandlers) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Check content type
 	if err := halper.CheckBodyContent(r); err != nil {
 		logger.NewWarnMessage("Invalid content type",
