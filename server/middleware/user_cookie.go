@@ -2,48 +2,68 @@ package middleware
 
 import (
 	"context"
+	"fmt"
+	"labyrinth/logger"
 	"labyrinth/logic"
 	"net/http"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
-// import (
-// 	"context"
-// 	ownJwt "labyrinth/jwt"
-// 	"net/http"
+type contextKey string
 
-// 	"github.com/google/uuid"
-// )
+const (
+	userIDKey contextKey = "id"
+)
 
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("jwt_token_user")
+		cookie, err := r.Cookie("labyrinth_user")
 		if err != nil {
-			http.Error(w, "Missing or invalid JWT cookie", http.StatusUnauthorized)
+			logger.NewWarnMessage("Missing auth cookie",
+				zap.Error(err),
+			)
+			http.Error(w, "Authentication required", http.StatusUnauthorized)
+			return
+		}
+
+		if cookie.Value == "" {
+			logger.NewWarnMessage("Empty cookie value")
+			http.Error(w, "Invalid authentication token", http.StatusUnauthorized)
 			return
 		}
 
 		bl := logic.NewBusinessLogic()
 		claims, err := bl.Jwt.VerifyToken(cookie.Value)
 		if err != nil {
-			http.Error(w, "Invalid or expired JWT token", http.StatusUnauthorized)
+			logger.NewWarnMessage("Invalid JWT token",
+				zap.Error(err),
+			)
+			http.Error(w, "Invalid or expired authentication token", http.StatusUnauthorized)
 			return
 		}
 
 		userID, ok := claims["id"].(string)
 		if !ok {
-			http.Error(w, "Invalid user ID in token", http.StatusUnauthorized)
+			logger.NewWarnMessage("Invalid user ID type in token",
+				zap.Any("id_type", fmt.Sprintf("%T", claims["id"])),
+			)
+			http.Error(w, "Invalid user credentials", http.StatusUnauthorized)
 			return
 		}
 
 		parsedUUID, err := uuid.Parse(userID)
 		if err != nil {
-			http.Error(w, "Invalid UUID format", http.StatusBadRequest)
+			logger.NewWarnMessage("Invalid UUID format in token",
+				zap.String("user_id", userID),
+				zap.Error(err),
+			)
+			http.Error(w, "Invalid user credentials", http.StatusUnauthorized)
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "userUUID", parsedUUID)
+		ctx := context.WithValue(r.Context(), userIDKey, parsedUUID)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
