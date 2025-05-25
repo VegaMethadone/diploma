@@ -100,13 +100,9 @@ func (c CompanyHandlers) NewCompanyHandler(w http.ResponseWriter, r *http.Reques
 	// 8. Успешный ответ
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	response := map[string]interface{}{
+	response := map[string]any{
 		"status":  "success",
 		"message": "Company created successfully",
-		"company": map[string]string{
-			"name":        requestData.Name,
-			"description": requestData.Description,
-		},
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {

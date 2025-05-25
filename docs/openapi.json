@@ -1,55 +1,119 @@
 {
     "openapi": "3.0.3",
     "info": {
-      "title": "Blog API",
-      "description": "API для управления постами в блоге",
+      "title": "Labyrinth",
+      "description": "API для управления лаб журналами в компании",
       "version": "1.0.0"
     },
     "servers": [
       {
-        "url": "http://localhost:8080/api/v1",
+        "url": "http://localhost:8080/labyrinth/",
         "description": "Локальный сервер разработки"
       }
     ],
     "paths": {
-      "/posts": {
+      "/ping": {
         "get": {
-          "summary": "Получить список всех постов",
+          "summary": "Проверка сервера к готовности",
           "responses": {
             "200": {
-              "description": "Успешный запрос",
+              "description": "Сервер готов к работе",
               "content": {
-                "application/json": {
+                "text/plain":{
                   "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/Post"
-                    }
+                    "type": "string",
+                    "example": "pong"
                   }
                 }
               }
+            },
+            "204": {
+              "description": "Сервер не работает"
             }
           }
-        },
+        }
+      },
+      "/auth/register": {
         "post": {
-          "summary": "Создать новый пост",
+          "summary": "Регистрация пользователя",
           "requestBody": {
             "required": true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostCreate"
+                  "type": "object",
+                  "properties": {
+                    "mail":{
+                      "type": "string",
+                      "format": "mail",
+                      "example": "ivanov3000@gmail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "minLength": 8,
+                      "example": "123jyx2ge8y1ge29cgh78et17heiocehuyeiu1"
+                    }, 
+                    "phone": {
+                      "type": "string",
+                      "minLength": 11,
+                      "example": "+77775553535"
+                    }
+                  },
+                  "required": ["mail", "password", "phone"]
                 }
               }
             }
           },
           "responses": {
             "201": {
-              "description": "Пост создан",
+              "description": "Успешная регистрация пользователя",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/Post"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "User registered successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Некорретные поля JSON объекта",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "415": {
+              "description": "Некорретный тип контента",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
                   }
                 }
               }
@@ -57,35 +121,949 @@
           }
         }
       },
-      "/posts/{id}": {
-        "get": {
-          "summary": "Получить пост по ID",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
+      "/auth/login": {
+        "post": {
+          "summary": "Авторизация пользователя",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mail":{
+                      "type": "string",
+                      "format": "mail",
+                      "example": "ivanov3000@gmail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "minLength": 8,
+                      "example": "123jyx2ge8y1ge29cgh78et17heiocehuyeiu1"
+                    }
+                  },
+                  "required": ["mail", "password"]
+                }
               }
             }
-          ],
+          },
           "responses": {
             "200": {
-              "description": "Успешный запрос",
+              "description": "Успешная авторизация пользователя",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/Post"
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Некорретные поля JSON объекта",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "415": {
+              "description": "Некорретный тип контента",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/profile": {
+        "get": {
+          "summary": "Получние профиля пользователя",
+          "responses": {
+            "200": {
+              "description": "Успешная авторизация пользователя",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "type": "string",
+                        "example": "ivanov3000@gmail.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example":  "123712yc39y893619t781xt6812mt82"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "ivanov3000@gmail.com"
+                      },
+                      "email_verified": {
+                        "type": "boolean",
+                        "example": "false"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "minLength": 11,
+                        "example": "+77775553535"
+                      },
+                      "phone_verified": {
+                        "type": "boolean",
+                        "example": "false"
+                      },
+                      "first_name": {
+                        "type": "string",
+                        "example": "Grock"
+                      },
+                      "last_name": {
+                        "type": "string",
+                        "example": "Grockovich"
+                      },
+                      "bio": {
+                        "type": "string",
+                        "example": "i am grandparent inside"
+                      },
+                      "telegram_username": {
+                        "type": "string",
+                        "example": "@Vegaomega"
+                      },
+                      "avatar_url": {
+                        "type": "string",
+                        "example": "aGVsbG93b3JsZA=="
+                      },
+                      "created_at": {
+                        "type":"string",
+                        "example": "2024-05-25T00:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post" : {
+          "summary": "Обновление профиля пользователя",
+          "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "login": {
+                        "type": "string",
+                        "example": "ivanov3000@gmail.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example":  "123712yc39y893619t781xt6812mt82"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "ivanov3000@gmail.com"
+                      },
+                      "email_verified": {
+                        "type": "boolean",
+                        "example": "false"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "minLength": 11,
+                        "example": "+77775553535"
+                      },
+                      "phone_verified": {
+                        "type": "boolean",
+                        "example": "false"
+                      },
+                      "first_name": {
+                        "type": "string",
+                        "example": "Grock"
+                      },
+                      "last_name": {
+                        "type": "string",
+                        "example": "Grockovich"
+                      },
+                      "bio": {
+                        "type": "string",
+                        "example": "i am grandparent inside"
+                      },
+                      "telegram_username": {
+                        "type": "string",
+                        "example": "@Vegaomega"
+                      },
+                      "avatar_url": {
+                        "type": "string",
+                        "example": "aGVsbG93b3JsZA=="
+                      },
+                      "created_at": {
+                        "type":"string",
+                        "example": "2024-05-25T00:00:00Z"
+                      }
+                    },
+                    "required": ["login", "password", "email", "email_verified", "phone", "phone_verified", "first_name", "last_name", "bio", "telegram_username", "avatar_url", "created_at"]
+                  }
+                }
+              }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное обновление профиля пользователя",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Profile updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Некорретные поля JSON объекта",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "415": {
+              "description": "Некорретный тип контента",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company": {
+        "post": {
+          "summary": "Регистрация новой компании",
+          "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "ARASAKA"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example":  "ARASAKA CORP"
+                      }
+                    },
+                    "required": ["name", "description"]
+                  }
+                }
+              }
+          },
+          "responses": {
+            "201": {
+              "description": "Успешное создание компании",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Company created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Некорретные поля JSON объекта",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "415": {
+              "description": "Некорретный тип контента",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ не разрешен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "summary": "Получние компаний пользователя",
+          "responses": {
+            "200": {
+              "description": "Успешное получение компаний",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "companies":{
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id":  {
+                              "type": "string",
+                              "example": "12345678-1234-5678-1234-567812345678"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "ARASAKA"
+                            }
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ не разрешен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}": {
+        "get": {
+          "summary": "Получение корневой дериктории компании",
+          "responses": {
+            "200": {
+              "description": "Успешное получение корневой дериктории",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "folder":{
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "parent_uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440001"
+                          },
+                          "isPrimary": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "1.0.0"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "company_id": {
+                                "type": "string",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "division_id": {
+                                "type": "string",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "ARASAKA CORP"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "Основное хранилище документов"
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": ["sniper rifle", "khife"]
+                              },
+                              "created": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "last_update": {
+                                  "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "links":  {
+                                "type": "object",
+                                "properties": {
+                                  "read": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/read/456"
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/comments/456"
+                                  },
+                                  "write": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/write/456"
+                                  },
+                                  "active_links": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "example": ["/api/v1/read/456", "/api/v1/write/456"]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "folders": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "folder_id": {
+                                  "type": "string",
+                                  "description": "MongoDB ObjectID",
+                                  "example":  "507f1f77bcf86cd799439012"
+                                },
+                                "uuid_id":  {
+                                  "type":"string",
+                                  "format": "uuid",
+                                  "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "natri natri"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "description of natri"
+                                }
+                              }
+                            }
+                          },
+                          "files":  {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "file_id": {
+                                  "type": "string",
+                                  "description": "MongoDB ObjectID",
+                                  "example":  "507f1f77bcf86cd799439012"
+                                },
+                                "uuid_id":  {
+                                  "type":"string",
+                                  "format": "uuid",
+                                  "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "natri natri"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "description of natri"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "company_id": {
+                        "type": "string",
+                        "example": "12345678-1234-5678-1234-567812345678"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ не разрешен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/profile": {
+        "get": {
+          "summary": "Получение профиля компании",
+          "responses": {
+            "200": {
+              "description": "Профиль компании успешно найден",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "ARASAKA CORP"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "ARASAKA DESCRIPTION"
+                      },
+                      "logo_url": {
+                        "type": "string",
+                        "example": "ABC214ABC=="
+                      },
+                      "industry": {
+                        "type": "string",
+                        "example": "WEAPON"
+                      },
+                      "founded_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-20T00:00:00Z"
+                      },
+                      "address": {
+                        "type": "string",
+                        "example":  "Saint.P, Nevskyi.11"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "minLength": 11,
+                        "example": "79659991313"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "evanov3000@gmail.com"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
                   }
                 }
               }
             },
             "404": {
-              "description": "Пост не найден"
+              "description": "Компания не найдена",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Обновление профиля компании",
+          "requestBody":{
+            "required": true,
+            "content": {
+              "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "ARASAKA CORP"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "ARASAKA DESCRIPTION"
+                      },
+                      "logo_url": {
+                        "type": "string",
+                        "example": "ABC214ABC=="
+                      },
+                      "industry": {
+                        "type": "string",
+                        "example": "WEAPON"
+                      },
+                      "founded_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-20T00:00:00Z"
+                      },
+                      "address": {
+                        "type": "string",
+                        "example":  "Saint.P, Nevskyi.11"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "minLength": 11,
+                        "example": "79659991313"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "evanov3000@gmail.com"
+                      }
+                    }
+                  }
+                }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Профиль компании успешно обновлен",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Company updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
             }
           }
         }
+      },
+      "/user/{user_id}/company/{company_id}/position": {
+
+      },
+      "/user/{user_id}/company/{company_id}/position/{position_id}": {
+
       }
     },
     "components": {

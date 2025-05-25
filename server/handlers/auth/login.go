@@ -86,6 +86,7 @@ func (a AuthHandlers) LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"status": "success",
 	}
+	w.WriteHeader(http.StatusOK)
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		logger.NewErrMessage("Failed to encode response",
