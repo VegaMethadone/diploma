@@ -76,6 +76,7 @@ func (e EmployeeHandlers) GetAllEmployeeHandler(w http.ResponseWriter, r *http.R
 	response := map[string]interface{}{
 		"status":    "success",
 		"employees": employees,
+		"count":     len(*employees),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

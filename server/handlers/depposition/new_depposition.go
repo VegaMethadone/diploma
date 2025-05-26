@@ -120,11 +120,11 @@ func (d DepPositionHandlers) NewDepPositionHandler(w http.ResponseWriter, r *htt
 
 	// 9. Формирование ответа
 	response := map[string]interface{}{
-		"status":        "success",
-		"message":       "Department position created successfully",
-		"name":          requestData.Name,
-		"level":         requestData.Lvl,
-		"department_id": departmentId.String(),
+		"status":  "success",
+		"message": "Department position created successfully",
+		// "name":          requestData.Name,
+		// "level":         requestData.Lvl,
+		// "department_id": departmentId.String(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

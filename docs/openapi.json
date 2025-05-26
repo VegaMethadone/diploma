@@ -11,6 +11,40 @@
         "description": "Локальный сервер разработки"
       }
     ],
+    "tags": [
+      {
+        "name": "Authentication",
+        "description": "Операции с авторизацией пользователя"
+      },
+      {
+        "name": "User",
+        "description": "Операции с профилем пользователя"
+      },
+      {
+        "name": "Company",
+        "description": "Операции с компанией"
+      },
+      {
+        "name": "Employee",
+        "description": "Операции с работниками компании"
+      },
+      {
+        "name": "Position",
+        "description": "Операции с позициями в компании"
+      },
+      {
+        "name": "Department",
+        "description": "Операции с департаментами в компании"
+      },
+      {
+        "name": "Department employee",
+        "description": "Операции с работниками департамента"
+      },
+      {
+        "name": "Department position",
+        "description": "Операции с позициями депертамента"
+      }
+    ],
     "paths": {
       "/ping": {
         "get": {
@@ -35,6 +69,7 @@
       },
       "/auth/register": {
         "post": {
+          "tags": ["Authentication"],
           "summary": "Регистрация пользователя",
           "requestBody": {
             "required": true,
@@ -123,6 +158,7 @@
       },
       "/auth/login": {
         "post": {
+          "tags": ["Authentication"],
           "summary": "Авторизация пользователя",
           "requestBody": {
             "required": true,
@@ -202,6 +238,7 @@
       },
       "/user/{user_id}/profile": {
         "get": {
+          "tags": ["User"],
           "summary": "Получние профиля пользователя",
           "responses": {
             "200": {
@@ -290,6 +327,7 @@
           }
         },
         "post" : {
+          "tags": ["User"],
           "summary": "Обновление профиля пользователя",
           "requestBody": {
             "required": true,
@@ -423,6 +461,7 @@
       },
       "/user/{user_id}/company": {
         "post": {
+          "tags": ["Company"],
           "summary": "Регистрация новой компании",
           "requestBody": {
             "required": true,
@@ -524,6 +563,7 @@
           }
         },
         "get": {
+          "tags": ["Company"],
           "summary": "Получние компаний пользователя",
           "responses": {
             "200": {
@@ -600,6 +640,7 @@
       },
       "/user/{user_id}/company/{company_id}": {
         "get": {
+          "tags": ["Company"],
           "summary": "Получение корневой дериктории компании",
           "responses": {
             "200": {
@@ -836,6 +877,7 @@
       },
       "/user/{user_id}/company/{company_id}/profile": {
         "get": {
+          "tags": ["Company"],
           "summary": "Получение профиля компании",
           "responses": {
             "200": {
@@ -877,7 +919,7 @@
                       },
                       "email": {
                         "type": "string",
-                        "format": "email",
+                        "format": "mail",
                         "example": "evanov3000@gmail.com"
                       }
                     }
@@ -943,6 +985,7 @@
           }
         },
         "post": {
+          "tags": ["Company"],
           "summary": "Обновление профиля компании",
           "requestBody":{
             "required": true,
@@ -983,7 +1026,7 @@
                       },
                       "email": {
                         "type": "string",
-                        "format": "email",
+                        "format": "mail",
                         "example": "evanov3000@gmail.com"
                       }
                     }
@@ -1060,50 +1103,2228 @@
         }
       },
       "/user/{user_id}/company/{company_id}/position": {
+        "get": {
+          "tags": ["Position"],
+          "summary": "Получние позиций в компании",
+          "responses": {
+            "200":  {
+              "description": "Успешное получение позиций компании",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Positions retrieved successfully"
+                      },
+                      "positions": {
+                        "type": "array",
+                        "items":{
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "company_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "lvl":  {
+                              "type": "integer",
+                              "example": 2
+                            },
+                            "name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "example": "no_name"
+                            },
+                            "is_active": {
+                              "type": "boolean",
+                              "example":  true
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            }
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
 
+        },
+        "post": {
+          "tags": ["Position"],
+          "summary": "Добавление позиции в компанию",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "company_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "lvl":  {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "example": "no_name"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example":  true
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    }
+                  },
+                  "required": ["id", "company_id", "lvl", "name", "is_active", "created_at", "updated_at"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное добавление позиции",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Position created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "/user/{user_id}/company/{company_id}/position/{position_id}": {
-
-      }
-    },
-    "components": {
-      "schemas": {
-        "Post": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "title": {
-              "type": "string"
-            },
+        "post": {
+          "tags": ["Position"],
+          "summary": "Обновление позиции в компании",
+          "requestBody": {
+            "required": true,
             "content": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time"
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "company_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "lvl":  {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "example": "no_name"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example":  true
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    }
+                  },
+                  "required": ["id", "company_id", "lvl", "name", "is_active", "created_at", "updated_at"]
+                }
+              }
             }
           },
-          "required": [
-            "id",
-            "title"
-          ]
+          "responses": {
+            "200": {
+              "description": "Успешное добавление позиции",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Position updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/employee": {
+        "get":{
+          "tags": ["Employee"],
+          "summary": "Получние работников компании",
+          "responses": {
+            "200": {
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "employees": {
+                        "type": "array",
+                        "items":{
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "user_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "company_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "position_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "is_active": {
+                              "type": "boolean",
+                              "example":  true
+                            },
+                            "is_online": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "last_activity_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            }
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
         },
-        "PostCreate": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string"
-            },
+        "post": {
+          "tags": ["Employee"],
+          "summary": "Добавление нового работника в компанию",
+          "requestBody": {
+            "required": true,
             "content": {
-              "type": "string"
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "company_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "position_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example":  true
+                    },
+                    "is_online": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "last_activity_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    }
+                  },
+                  "required": ["id", "user_id", "company_id", "position_id", "is_active", "is_online", "last_activity_at", "created_at", "updated_at"]
+                }
+              }
             }
           },
-          "required": [
-            "title"
-          ]
+          "responses": {
+            "200": {
+              "description": "Успешное добавление работника",
+              "content": {
+                "application/json":  {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Employee created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/employee/{employee_id}": {
+        "post": {
+          "tags": ["Employee"],
+          "summary": "Обновление работника в компании",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "user_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "company_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "position_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example":  true
+                    },
+                    "is_online": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "last_activity_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    }
+                  },
+                  "required": ["id", "user_id", "company_id", "position_id", "is_active", "is_online", "last_activity_at", "created_at", "updated_at"]
+                }
+              }
+            }
+          }, 
+          "responses": {
+            "200": {
+              "description": "Успешное добавление работника",
+              "content": {
+                "application/json":  {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Employee updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }         
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department": {
+        "post": {
+          "tags": ["Department"],
+          "summary": "Создание нового департамента",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 4,
+                      "example": "some_name"
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 0,
+                      "example": "some_description"
+                    }
+                  }
+                }
+              }
+            }
+          }, "responses": {
+            "200": {
+              "description": "Успешное создание департамента",
+              "content": {
+                "application/json":  {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Department created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}": {
+        "get": {
+          "tags": ["Department"],
+          "summary": "Получние департамента",
+          "responses": {
+            "200": {
+              "description": "Успешное создание департамента",
+              "content": {
+                "application/json":  {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "department": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "company_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "company name"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "description of company"
+                          },
+                          "avatar_url": {
+                            "type": "string",
+                            "format": "base64",
+                            "example": "abc123abc123=="
+                          },
+                          "parent": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "is_active": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      },
+                      "folder":{
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "parent_uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440001"
+                          },
+                          "isPrimary": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "1.0.0"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "company_id": {
+                                "type": "string",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "division_id": {
+                                "type": "string",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "ARASAKA CORP"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "Основное хранилище документов"
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": ["sniper rifle", "khife"]
+                              },
+                              "created": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "last_update": {
+                                  "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "links":  {
+                                "type": "object",
+                                "properties": {
+                                  "read": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/read/456"
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/comments/456"
+                                  },
+                                  "write": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/write/456"
+                                  },
+                                  "active_links": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "example": ["/api/v1/read/456", "/api/v1/write/456"]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "folders": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "folder_id": {
+                                  "type": "string",
+                                  "description": "MongoDB ObjectID",
+                                  "example":  "507f1f77bcf86cd799439012"
+                                },
+                                "uuid_id":  {
+                                  "type":"string",
+                                  "format": "uuid",
+                                  "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "natri natri"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "description of natri"
+                                }
+                              }
+                            }
+                          },
+                          "files":  {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "file_id": {
+                                  "type": "string",
+                                  "description": "MongoDB ObjectID",
+                                  "example":  "507f1f77bcf86cd799439012"
+                                },
+                                "uuid_id":  {
+                                  "type":"string",
+                                  "format": "uuid",
+                                  "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "example": "natri natri"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "description of natri"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }, 
+        "post": {
+          "tags": ["Department"],
+          "summary": "Обновление департамента",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "MongoDB ObjectID",
+                      "example": "507f1f77bcf86cd799439011"
+                    },
+                    "uuid_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "550e8400-e29b-41d4-a716-446655440000"
+                    },
+                    "parent_uuid_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "550e8400-e29b-41d4-a716-446655440001"
+                    },
+                    "isPrimary": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "company_id": {
+                          "type": "string",
+                          "example": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        "division_id": {
+                          "type": "string",
+                          "example": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "ARASAKA CORP"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Основное хранилище документов"
+                        },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": ["sniper rifle", "khife"]
+                        },
+                        "created": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "time": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "author": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "550e8400-e29b-41d4-a716-446655440000"
+                            }
+                          }
+                        },
+                        "last_update": {
+                            "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "time": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "author": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "550e8400-e29b-41d4-a716-446655440000"
+                            }
+                          }
+                        },
+                        "links":  {
+                          "type": "object",
+                          "properties": {
+                            "read": {
+                              "type": "string",
+                              "format": "uri",
+                              "example": "/api/v1/read/456"
+                            },
+                            "comment": {
+                              "type": "string",
+                              "format": "uri",
+                              "example": "/api/v1/comments/456"
+                            },
+                            "write": {
+                              "type": "string",
+                              "format": "uri",
+                              "example": "/api/v1/write/456"
+                            },
+                            "active_links": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "example": ["/api/v1/read/456", "/api/v1/write/456"]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "folders": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "folder_id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example":  "507f1f77bcf86cd799439012"
+                          },
+                          "uuid_id":  {
+                            "type":"string",
+                            "format": "uuid",
+                            "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "natri natri"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "description of natri"
+                          }
+                        }
+                      }
+                    },
+                    "files":  {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "file_id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example":  "507f1f77bcf86cd799439012"
+                          },
+                          "uuid_id":  {
+                            "type":"string",
+                            "format": "uuid",
+                            "example":  "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "natri natri"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "description of natri"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": ["id", "uuid_id", "parent_uuid_id", "isPrimary", "version",  "metadata", "folders", "files"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное обновление папки департамента",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Department updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/profile": {
+        "get": {
+          "tags": ["Department"],
+          "summary": "Получние профиля департамента",
+          "responses": {
+            "200": {
+              "description": "Успешное обновление профиля департамента",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "department": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "company_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "company name"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "description of company"
+                          },
+                          "avatar_url": {
+                            "type": "string",
+                            "format": "base64",
+                            "example": "abc123abc123=="
+                          },
+                          "parent": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "is_active": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }, 
+        "post": {
+          "tags": ["Department"],
+          "summary": "Обновление профиля департамента",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "company_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "company name"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "description of company"
+                    },
+                    "avatar_url": {
+                      "type": "string",
+                      "format": "base64",
+                      "example": "abc123abc123=="
+                    },
+                    "parent": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          }, 
+          "responses": {
+            "200": {
+              "description": "Успешное обновление профиля департамента",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Department updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/depemployee": {
+        "get": {
+          "tags": ["Department employee"],
+          "summary": "Получние работников департамента",
+          "responses": {
+            "200": {
+              "description": "Успешное получние сотрудников департамента",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "type": "string",
+                        "example": "success"
+                      }, 
+                      "employees": {
+                        "type": "array",
+                        "items":{
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "employee_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "department_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "position_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2023-07-20T00:00:00Z"
+                            },
+                            "is_active": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Department employee"],
+          "summary": "Добавление нового работника департамента",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "employee_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "position_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное добавление работника в департамент",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Employee added to department successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/depemployee/{depemployee_id}": {
+        "post": {
+          "tags": ["Department employee"],
+          "summary": "Обновление профиля работника департамента",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "employee_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "department_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "position_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2023-07-20T00:00:00Z"
+                    },
+                    "is_active": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное обновление работника в департаменте",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Department employee updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }          
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/depposition": {
+        "get": {
+          "tags": ["Department position"],
+          "summary": "Получние списка позиций в департаменте",
+          "responses": {
+            "200": {
+              "description": "Успешное получение списка позиций",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "positions": {
+                        "type": "array",
+                        "items":{
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "department_id": {
+                              "type": "string",
+                              "format": "uuid",
+                              "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            },
+                            "lvl": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "GAMMA"
+                            }
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Department position"],
+          "summary": "Добавление новой позиции в департамент",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lvl": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Chiza_Demon"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное добавление позиции в департамент",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message":  {
+                        "type": "string",
+                        "example": "Department position created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/depposition/{depposition_id}": {
+        "post": {
+          "tags": ["Department position"],
+          "summary": "Получние списка позиций в департаменте",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "department_id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    },
+                    "lvl": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "GAMMA"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное обновление позиции в департамент",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message":  {
+                        "type": "string",
+                        "example": "Department position updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
-  }
+}

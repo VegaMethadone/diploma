@@ -94,6 +94,7 @@ func (d DepPositionHandlers) GetAllDepPositionHandler(w http.ResponseWriter, r *
 	response := map[string]interface{}{
 		"status":    "success",
 		"positions": positions,
+		"count":     len(*positions),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

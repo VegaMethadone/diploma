@@ -92,7 +92,12 @@ func (d DepEmployeeHandlers) GetAllDepEmployeeHandler(w http.ResponseWriter, r *
 
 	// 7. Отправка ответа
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(employees); err != nil {
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(map[string]interface{}{
+		"result":    "success",
+		"employees": employees,
+		"count":     len(*employees),
+	}); err != nil {
 		logger.NewErrMessage("Failed to encode response",
 			zap.String("operation", "GetAllDepEmployeeHandler"),
 			zap.String("department_id", departmentId.String()),

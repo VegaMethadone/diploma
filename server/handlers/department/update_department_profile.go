@@ -126,9 +126,9 @@ func (d DepartmentHandlers) UpdateDepartmentProfileHandler(w http.ResponseWriter
 
 	// 11. Формирование успешного ответа
 	response := map[string]interface{}{
-		"status":        "success",
-		"message":       "Department updated successfully",
-		"department_id": departmentId.String(),
+		"status":  "success",
+		"message": "Department updated successfully",
+		// "department_id": departmentId.String(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -125,12 +125,12 @@ func (p PositionHandlers) UpdatePositionHandler(w http.ResponseWriter, r *http.R
 
 	// 8. Формирование ответа
 	response := map[string]interface{}{
-		"status":      "success",
-		"message":     "Position updated successfully",
-		"position_id": positionId.String(),
-		"name":        requestData.Name,
-		"level":       requestData.Lvl,
-		"company_id":  companyId.String(),
+		"status":  "success",
+		"message": "Position updated successfully",
+		// "position_id": positionId.String(),
+		// "name":        requestData.Name,
+		// "level":       requestData.Lvl,
+		// "company_id":  companyId.String(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

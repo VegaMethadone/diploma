@@ -119,10 +119,10 @@ func (e EmployeeHandlers) UpdateEmployeeHandler(w http.ResponseWriter, r *http.R
 
 	// 11. Формирование успешного ответа
 	response := map[string]interface{}{
-		"status":      "success",
-		"message":     "Employee updated successfully",
-		"employee_id": employeeId.String(),
-		"position_id": requestData.PositionID.String(),
+		"status":  "success",
+		"message": "Employee updated successfully",
+		// "employee_id": employeeId.String(),
+		// "position_id": requestData.PositionID.String(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")

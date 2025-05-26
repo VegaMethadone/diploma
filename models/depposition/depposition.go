@@ -6,7 +6,7 @@ import (
 
 type DepPosition struct {
 	Id           uuid.UUID `json: "id"`
-	DepartmentId uuid.UUID `json: "departmentId"`
+	DepartmentId uuid.UUID `json: "department_id"`
 	Level        int       `json: "lvl"`
 	Name         string    `json: "name"`
 }

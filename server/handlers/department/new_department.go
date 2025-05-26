@@ -148,10 +148,10 @@ func (d DepartmentHandlers) NewDepartmentHandler(w http.ResponseWriter, r *http.
 	// 10. Формирование успешного ответа
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":        "success",
-		"message":       "Department created successfully",
-		"department_id": requestData.ParentId.String(),
-		"company_id":    companyId.String(),
+		"status":  "success",
+		"message": "Department created successfully",
+		// "department_id": requestData.ParentId.String(),
+		// "company_id":    companyId.String(),
 	}); err != nil {
 		logger.NewErrMessage("Failed to encode response",
 			zap.String("operation", "NewDepartmentHandler"),

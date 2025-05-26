@@ -8,12 +8,12 @@ import (
 
 type DepartmentEmployee struct {
 	ID           uuid.UUID `json:"id"`
-	EmployeeID   uuid.UUID `json:"employeeId"`
-	DepartmentID uuid.UUID `json:"departmentId"`
-	PositionID   uuid.UUID `json:"positionId"` // Соответствует полю position_id из таблицы
-	CreatedAt    time.Time `json: "createdAt"`
-	UpdatedAt    time.Time `json: "updatedAt"`
-	IsActive     bool      `json:"isActive"` // Добавлено из таблицы
+	EmployeeID   uuid.UUID `json:"employee_id"`
+	DepartmentID uuid.UUID `json:"department_id"`
+	PositionID   uuid.UUID `json:"position_id"`
+	CreatedAt    time.Time `json: "created_at"`
+	UpdatedAt    time.Time `json: "updated_at"`
+	IsActive     bool      `json:"is_active"`
 }
 
 func NewDepartmentEmployee(

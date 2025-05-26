@@ -13,7 +13,7 @@ type Employee struct {
 	PositionID     uuid.UUID `json:"position_id"`
 	IsActive       bool      `json:"is_active"`
 	IsOnline       bool      `json:"is_online"`
-	LastActivityAt time.Time `json:"last_activity_at,omitempty"`
+	LastActivityAt time.Time `json:"last_activity_at"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }
