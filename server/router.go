@@ -105,8 +105,8 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/depposition/{depposition_id}", middleware.AuthMiddleware(manager.DepartmentEmployeePosition.UpdateDepPositionHandler)).Methods("POST")
 
 	// работа с лабораторными  журналами
-	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department/{department_id}/notebook").Method("POST")
-	// r.HandleFunc("labyrinth/user/{user_id}/company/{compnay_id}/department/{department_id}/notebook/{notebook_id}").Method("GET", "POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook").Method("POST")
+	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}").Method("GET", "POST")
 
 	return r
 }
