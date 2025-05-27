@@ -236,6 +236,12 @@
           }
         }
       },
+      "/auth/reset": {
+        "post": {
+          "summary": "[ DEVELOPING ]: Сброс пароля. Нужен доп сервис",
+          "tags": ["Authentication"]
+        }
+      },
       "/user/{user_id}/profile": {
         "get": {
           "tags": ["User"],
@@ -457,6 +463,11 @@
               }
             }
           }
+        },
+        "delete": {
+          "tags": ["User"],
+          "summary": "[ DEVELOPING ]: Удаление  пользователя"
+
         }
       },
       "/user/{user_id}/company": {
@@ -1100,6 +1111,10 @@
               }
             }
           }
+        },
+        "delete": {
+          "tags": ["Company"],
+          "summary": "[ DEVELOPING ]: Удаление компании"
         }
       },
       "/user/{user_id}/company/{company_id}/position": {
@@ -1452,6 +1467,10 @@
               }
             }
           }
+        },
+        "delete": {
+          "tags": ["Position"],
+          "summary": "[ DEVELOPING ]: Удаление позиции"
         }
       },
       "/user/{user_id}/company/{company_id}/employee": {
@@ -1828,6 +1847,10 @@
               }
             }
           }         
+        },
+        "delete": {
+          "tags": ["Employee"],
+          "summary": "[ DEVELOPING ]: Удаление работника"
         }
       },
       "/user/{user_id}/company/{company_id}/department": {
@@ -2710,6 +2733,10 @@
               }
             }
           }
+        },
+        "delete": {
+          "tags": ["Department"],
+          "summary": "[ DEVELOPING ]: Удаление департамента"
         }
       },
       "/user/{user_id}/company/{company_id}/department/{department_id}/depemployee": {
@@ -3034,6 +3061,10 @@
               }
             }
           }          
+        },
+        "delete": {
+          "tags": ["Department employee"],
+          "summary": "[ DEVELOPING ]: Удаление работника департамента"
         }
       },
       "/user/{user_id}/company/{company_id}/department/{department_id}/depposition": {
@@ -3324,6 +3355,10 @@
               }
             }
           }
+        },
+        "delete": {
+          "tags": ["Department position"],
+          "summary": "[ DEVELOPING ]: Удаление позиции департамента"
         }
       }
     }
