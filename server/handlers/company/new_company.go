@@ -16,11 +16,11 @@ import (
 func (c CompanyHandlers) NewCompanyHandler(w http.ResponseWriter, r *http.Request) {
 	// 1. Получаем и проверяем userID из контекста
 	ctx := r.Context()
-	userID, ok := ctx.Value("id").(uuid.UUID)
+	userID, ok := ctx.Value(userIDKey).(uuid.UUID)
 	if !ok || userID == uuid.Nil {
 		logger.NewErrMessage("Invalid user ID in context",
 			zap.String("operation", "NewCompanyHandler"),
-			zap.Any("context_values", ctx.Value("id")),
+			zap.Any("context_values", ctx.Value(userIDKey)),
 		)
 		http.Error(w, "Authentication required", http.StatusUnauthorized)
 		return

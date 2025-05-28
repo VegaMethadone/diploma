@@ -2,6 +2,10 @@ package depposition
 
 import "labyrinth/logic"
 
+const (
+	userIDKey string = "id"
+)
+
 var bl *logic.BusinessLogic = logic.NewBusinessLogic()
 
 type DepPositionHandlers struct{}

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"labyrinth/logger"
 	"labyrinth/server"
 	"log"
 	"net/http"
@@ -10,10 +11,25 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 func main() {
 	fmt.Println("Starting server...")
+
+	currentTime := time.Now()
+	dateDir := currentTime.Format("02_01_2006")
+	timeFile := currentTime.Format("15_04")
+	loggerPath := fmt.Sprintf("../logs/%s/%s.log", dateDir, timeFile)
+	if err := os.MkdirAll(fmt.Sprintf("../logs/%s", dateDir), 0755); err != nil {
+		panic(fmt.Sprintf("Failed to create log directory: %v", err))
+	}
+	fmt.Println("[ LOGS PATH ]: ", loggerPath)
+	logger.InitFileLogger(loggerPath)
+	logger.NewInfoMessage("Server is starting...",
+		zap.Time("time", currentTime),
+	)
 
 	// Настройка HTTP-сервера с таймаутами
 	httpServer := server.NewServer()

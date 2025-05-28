@@ -35,7 +35,6 @@ func (a AuthHandlers) RegisterUserHandler(w http.ResponseWriter, r *http.Request
 		http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-
 	// 3. Validate request data
 	if err := validateRegisterRequest(requestData); err != nil {
 		logger.NewWarnMessage("Validation failed",

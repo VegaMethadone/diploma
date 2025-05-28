@@ -4,6 +4,10 @@ import (
 	notebookLogic "labyrinth/notebook/logic"
 )
 
+const (
+	userIDKey string = "id"
+)
+
 var fsl *notebookLogic.FileSystem = notebookLogic.NewFileSystem()
 
 type JournalHandler struct{}

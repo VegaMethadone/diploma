@@ -6,6 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	userIDKey string = "id"
+)
+
 var bl *logic.BusinessLogic = logic.NewBusinessLogic()
 
 type EmployeeHandlers struct{}

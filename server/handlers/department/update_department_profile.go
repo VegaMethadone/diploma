@@ -18,11 +18,11 @@ func (d DepartmentHandlers) UpdateDepartmentProfileHandler(w http.ResponseWriter
 	ctx := r.Context()
 
 	// 1. Проверка аутентификации пользователя
-	userID, ok := ctx.Value("id").(uuid.UUID)
+	userID, ok := ctx.Value(userIDKey).(uuid.UUID)
 	if !ok || userID == uuid.Nil {
 		logger.NewErrMessage("Invalid user ID in context",
 			zap.String("operation", "UpdateDepartmentProfileHandler"),
-			zap.Any("context_values", ctx.Value("id")),
+			zap.Any("context_values", ctx.Value(userIDKey)),
 		)
 		http.Error(w, "Authentication required", http.StatusUnauthorized)
 		return

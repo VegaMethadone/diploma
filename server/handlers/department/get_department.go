@@ -15,11 +15,11 @@ import (
 func (d DepartmentHandlers) GetDepartmentHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	userID, ok := ctx.Value("id").(uuid.UUID)
+	userID, ok := ctx.Value(userIDKey).(uuid.UUID)
 	if !ok || userID == uuid.Nil {
 		logger.NewErrMessage("Invalid user ID in context",
 			zap.String("operation", "GetDepartmentHandler"),
-			zap.Any("context_values", ctx.Value("id")),
+			zap.Any("context_values", ctx.Value(userIDKey)),
 		)
 		http.Error(w, "Authentication required", http.StatusUnauthorized)
 		return

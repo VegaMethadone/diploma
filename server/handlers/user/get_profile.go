@@ -13,11 +13,12 @@ func (u UserHandlers) GetUserProfileHandler(w http.ResponseWriter, r *http.Reque
 	// 1. Получаем контекст и извлекаем userID
 	ctx := r.Context()
 
-	userID, ok := ctx.Value("id").(uuid.UUID)
+	// userID, ok := ctx.Value(userIDKey).(uuid.UUID)
+	userID, ok := ctx.Value(userIDKey).(uuid.UUID)
 	if !ok || userID == uuid.Nil {
 		logger.NewErrMessage("Invalid user ID in context",
 			zap.String("operation", "GetUserProfileHandler"),
-			zap.Any("context_values", ctx.Value("id")), // Логируем фактическое значение для отладки
+			zap.Any("context_values", ctx.Value(userIDKey)),
 		)
 		http.Error(w, "Authentication required", http.StatusUnauthorized)
 		return

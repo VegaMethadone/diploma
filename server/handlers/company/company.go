@@ -9,6 +9,10 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	userIDKey string = "id"
+)
+
 var bl *logic.BusinessLogic = logic.NewBusinessLogic()
 var fsl *notebookLogic.FileSystem = notebookLogic.NewFileSystem()
 

@@ -7,6 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	userIDKey string = "id"
+)
+
 type DepartmentHandlers struct{}
 
 func NewDepartmentHandlers() DepartmentHandlers { return DepartmentHandlers{} }
