@@ -105,8 +105,12 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/depposition/{depposition_id}", middleware.AuthMiddleware(manager.DepartmentEmployeePosition.UpdateDepPositionHandler)).Methods("POST")
 
 	// работа с лабораторными  журналами
-	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook").Method("POST")
-	// r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}").Method("GET", "POST")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook", middleware.AuthMiddleware(manager.Notebook.NewNotebookHandler)).Methods("POST")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}", middleware.AuthMiddleware(manager.Notebook.GetNotebookHandler)).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}", middleware.AuthMiddleware(manager.Notebook.UpdateNotebookHandler)).Methods("POST")
 
+	// работа с разрешениями журнала
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}/permission", middleware.AuthMiddleware(manager.Permission.GetPermissionHandler)).Methods("GET")
+	r.HandleFunc("labyrinth/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}/permission", middleware.AuthMiddleware(manager.Permission.UpdatePermissionHandler)).Methods("POST")
 	return r
 }

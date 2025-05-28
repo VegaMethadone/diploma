@@ -7,16 +7,16 @@ import (
 )
 
 type Permission struct {
-	ID           primitive.ObjectID `bson:"_id,omitempty"`     // MongoDB ObjectID
-	UuidId       string             `bson:"uuid_id,omitempty"` // Дополнительный UUID идентификатор
-	ResourceType string             `bson:"resource_type"`     // Тип ресурса: "document", "folder", "file"
-	ResourceID   primitive.ObjectID `bson:"resource_id"`       // ID ресурса в MongoDB
-	ResourceUuid string             `bson:"resource_uuid"`     // UUID ресурса (альтернативный идентификатор)
-	Rules        PermissionRules    `bson:"rules"`             // Правила доступа
-	CreatedAt    time.Time          `bson:"created_at"`        // Время создания
-	UpdatedAt    time.Time          `bson:"updated_at"`        // Время последнего обновления
-	CreatedBy    string             `bson:"created_by"`        // Кто создал (user_id/uuid)
-	Version      string             `bson:"version"`           // Версия для оптимистичной блокировки
+	ID           primitive.ObjectID `bson:"id"`            // MongoDB ObjectID
+	UuidId       string             `bson:"uuid_id"`       // Дополнительный UUID идентификатор
+	ResourceType string             `bson:"resource_type"` // Тип ресурса: "document", "folder", "file"
+	ResourceID   primitive.ObjectID `bson:"resource_id"`   // ID ресурса в MongoDB
+	ResourceUuid string             `bson:"resource_uuid"` // UUID ресурса (альтернативный идентификатор)
+	Rules        PermissionRules    `bson:"rules"`         // Правила доступа
+	CreatedAt    time.Time          `bson:"created_at"`    // Время создания
+	UpdatedAt    time.Time          `bson:"updated_at"`    // Время последнего обновления
+	CreatedBy    string             `bson:"created_by"`    // Кто создал (user_id/uuid)
+	Version      string             `bson:"version"`       // Версия для оптимистичной блокировки
 }
 
 type PermissionRules struct {

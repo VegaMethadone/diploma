@@ -13,6 +13,10 @@
     ],
     "tags": [
       {
+        "name": "Server",
+        "description": "Проверка сервера на работоспособность"
+      },
+      {
         "name": "Authentication",
         "description": "Операции с авторизацией пользователя"
       },
@@ -43,11 +47,16 @@
       {
         "name": "Department position",
         "description": "Операции с позициями депертамента"
-      }
+      },
+      {
+        "name": "Notebook",
+        "description": "Операции с лабораторным журналом"
+      }      
     ],
     "paths": {
       "/ping": {
         "get": {
+          "tags": ["Server"],
           "summary": "Проверка сервера к готовности",
           "responses": {
             "200": {
@@ -3360,6 +3369,908 @@
           "tags": ["Department position"],
           "summary": "[ DEVELOPING ]: Удаление позиции департамента"
         }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/notebook": {
+        "post": {
+          "tags": ["Notebook"],
+          "summary": "Создание лабораторного журнала",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "some notebook"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "some notebook"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное создание лаб журнала",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message":  {
+                        "type": "string",
+                        "example": "Notebook created successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}": {
+        "get":  {
+          "tags": ["Notebook"],
+          "summary": "Получние лабораторного  журнала",
+          "responses": {
+            "200": {
+              "description": "Успешное создание лаб журнала",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "notebook": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "1.0.0"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "company_id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "division_id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "some title"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "some description"
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "scince po"
+                                }
+                              },
+                              "created": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "last_update": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "links":  {
+                                "type": "object",
+                                "properties": {
+                                  "read": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/read/456"
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/comments/456"
+                                  },
+                                  "write": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/write/456"
+                                  },
+                                  "active_links": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "example": ["/api/v1/read/456", "/api/v1/write/456"]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "blocks": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "example": "550e8400-e29b-41d4-a716-446655440000"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "example": "title"
+                                },
+                                "body": {
+                                  "type": "object",
+                                  "additionalProperties": true,
+                                  "description": "Key-value pairs with mixed types"
+                                },
+                                "comments": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "employee_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                      },
+                                      "created_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-07-20T00:00:00Z"
+                                      },
+                                      "updated_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-07-20T00:00:00Z"
+                                      },
+                                      "comment": {
+                                        "type": "string",
+                                        "example": "some comment from chiza"
+                                      },
+                                      "sub_comments": {
+                                        "type": "array",
+                                        "items": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Notebook"],
+          "summary": "Обвноеление лабораторного журнала",
+          "requestBody": {
+            "required": true,
+            "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "notebook": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "1.0.0"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "company_id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "division_id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "example": "550e8400-e29b-41d4-a716-446655440000"
+                              },
+                              "title": {
+                                "type": "string",
+                                "example": "some title"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "some description"
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "scince po"
+                                }
+                              },
+                              "created": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "last_update": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "time": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-20T00:00:00Z"
+                                  },
+                                  "author": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                  }
+                                }
+                              },
+                              "links":  {
+                                "type": "object",
+                                "properties": {
+                                  "read": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/read/456"
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/comments/456"
+                                  },
+                                  "write": {
+                                    "type": "string",
+                                    "format": "uri",
+                                    "example": "/api/v1/write/456"
+                                  },
+                                  "active_links": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    },
+                                    "example": ["/api/v1/read/456", "/api/v1/write/456"]
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "blocks": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "example": "550e8400-e29b-41d4-a716-446655440000"
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "example": "title"
+                                },
+                                "body": {
+                                  "type": "object",
+                                  "additionalProperties": true,
+                                  "description": "Key-value pairs with mixed types"
+                                },
+                                "comments": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "employee_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                      },
+                                      "created_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-07-20T00:00:00Z"
+                                      },
+                                      "updated_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2023-07-20T00:00:00Z"
+                                      },
+                                      "comment": {
+                                        "type": "string",
+                                        "example": "some comment from chiza"
+                                      },
+                                      "sub_comments": {
+                                        "type": "array",
+                                        "items": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+              "description": "Успешное обновление лаб журнала",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message":  {
+                        "type": "string",
+                        "example": "Notebook updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+          
+        },
+        "delete": {
+          "tags": ["Notebook"],
+          "summary": "[ DEVELOPING ]: Удаление лаб журнала"
+  
+        }
+      },
+      "/user/{user_id}/company/{company_id}/department/{department_id}/notebook/{notebook_id}/permission": {
+        "get":  {
+          "tags": ["Notebook"],
+          "summary": "Получние доступа лабораторного журнала",
+          "responses": {
+            "200": {
+              "description": "Успешное получение лаб журнала",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "permission": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "uuid_id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "resource_type": {
+                            "type": "string",
+                            "example": "notebook"
+                          },
+                          "resource_id": {
+                            "type": "string",
+                            "description": "MongoDB ObjectID",
+                            "example": "507f1f77bcf86cd799439011"
+                          },
+                          "resource_uuid": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "rules": {
+                            "type": "object",
+                            "properties": {
+                              "access_allowed": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "50e8400-e29b-41d4-a716-446655440000"
+                                }
+                              },
+                              "comment_only": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "50e8400-e29b-41d4-a716-446655440000"
+                                }
+                              },
+                              "read_only": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "50e8400-e29b-41d4-a716-446655440000"
+                                }
+                              },
+                              "access_level": {
+                                "type": "string",
+                                "example": "private"
+                              }
+                            }
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-07-20T00:00:00Z"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                          },
+                          "version": {
+                            "type": "string",
+                            "example": "1.0.0"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Notebook"],
+          "summary": "Обновление доступа лабораторного журнала",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "permission": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "MongoDB ObjectID",
+                          "example": "507f1f77bcf86cd799439011"
+                        },
+                        "uuid_id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        "resource_type": {
+                          "type": "string",
+                          "example": "notebook"
+                        },
+                        "resource_id": {
+                          "type": "string",
+                          "description": "MongoDB ObjectID",
+                          "example": "507f1f77bcf86cd799439011"
+                        },
+                        "resource_uuid": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        "rules": {
+                          "type": "object",
+                          "properties": {
+                            "access_allowed": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "example": "50e8400-e29b-41d4-a716-446655440000"
+                              }
+                            },
+                            "comment_only": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "example": "50e8400-e29b-41d4-a716-446655440000"
+                              }
+                            },
+                            "read_only": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "example": "50e8400-e29b-41d4-a716-446655440000"
+                              }
+                            },
+                            "access_level": {
+                              "type": "string",
+                              "example": "private"
+                            }
+                          }
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2023-07-20T00:00:00Z"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2023-07-20T00:00:00Z"
+                        },
+                        "created_by": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "550e8400-e29b-41d4-a716-446655440000"
+                        },
+                        "version": {
+                          "type": "string",
+                          "example": "1.0.0"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Успешное обновление доступа лаб журнала",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "message":  {
+                        "type": "string",
+                        "example": "Notebook permission updated successfully"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Внутренняя ошибка сервера",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Пользователь не авторизован",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Доступ запрещен",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "string",
+                    "example": "error description"
+                  }
+                }
+              }
+            }
+          }
+        } 
       }
     }
 }

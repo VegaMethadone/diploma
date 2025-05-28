@@ -7,6 +7,8 @@ import (
 	"labyrinth/server/handlers/depemployee"
 	"labyrinth/server/handlers/depposition"
 	"labyrinth/server/handlers/employee"
+	"labyrinth/server/handlers/journal"
+	"labyrinth/server/handlers/permission"
 	"labyrinth/server/handlers/position"
 	"labyrinth/server/handlers/user"
 	"net/http"
@@ -62,6 +64,17 @@ type depemployeePosInterface interface {
 	UpdateDepPositionHandler(w http.ResponseWriter, r *http.Request)
 }
 
+type notebookInterface interface {
+	NewNotebookHandler(w http.ResponseWriter, r *http.Request)
+	GetNotebookHandler(w http.ResponseWriter, r *http.Request)
+	UpdateNotebookHandler(w http.ResponseWriter, r *http.Request)
+}
+
+type permissionInterface interface {
+	GetPermissionHandler(w http.ResponseWriter, r *http.Request)
+	UpdatePermissionHandler(w http.ResponseWriter, r *http.Request)
+}
+
 type Handlers struct {
 	Auth                       authInterface
 	UserProfile                userInterface
@@ -71,6 +84,8 @@ type Handlers struct {
 	Department                 departmentInterface
 	DepartmentEmployee         depemployeeInterface
 	DepartmentEmployeePosition depemployeePosInterface
+	Notebook                   notebookInterface
+	Permission                 permissionInterface
 }
 
 func NewHandlers() Handlers {
@@ -83,5 +98,7 @@ func NewHandlers() Handlers {
 		Department:                 department.NewDepartmentHandlers(),
 		DepartmentEmployee:         depemployee.NewDepEmployeeHandlers(),
 		DepartmentEmployeePosition: depposition.NewDepPositionHandlers(),
+		Notebook:                   journal.NewJournalHandler(),
+		Permission:                 permission.NewPermissionHandlers(),
 	}
 }
